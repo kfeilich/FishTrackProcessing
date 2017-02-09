@@ -6,9 +6,13 @@ import pandas as pd
 import numpy as np
 import scipy
 from scipy.signal import savgol_filter #for smoothing data
+from scipy.fftpack import fft
+from scipy.fftpack import fftfreq
 from mpl_toolkits.mplot3d import Axes3D
 import sys
 import matplotlib.pyplot as plt
+import peakutils
+from peakutils.plot import plot as pplot
 import matplotlib.cm as cm
 
 
@@ -17,13 +21,13 @@ root.withdraw()
 ######################################################################################################################
 #Data Extraction
 ######################################################################################################################
+folder = 'E:/Digitized Tracks'
+framerate = 500.0
 
 #User input
 #folder = filedialog.askdirectory()  #Ask user for directory
 #framerate = float(input('Enter frame rate in frames per second:')) #Probably 500; Note assumes all videos at same framerate
-folder = 'E:/Digitized Tracks'
-framerate = 500
-         
+
 #Initialize a list of dictionaries to contain each trial's data
 tracklist =  {}
 count = 0 # Initialize the count 
@@ -179,3 +183,50 @@ for trial in tracklist:# Iterates over all avalable trials
     plt.colorbar(m, shrink=0.5, aspect=10)
     plt.show()
 
+
+######################################################################################################################
+##Finding Tail Beat Frequency and Amplitude
+######################################################################################################################
+for trial in tracklist:# Iterates over all avalable trials
+    # By FFT
+    time = tracklist[trial]['data'].index.values
+    N = time.size
+    T = 1.0/framerate
+    # x = np.linspace(0.0, N*T, N)
+    # y = tracklist[trial]['data']['pt2y_smth'] - np.mean(tracklist[trial]['data']['pt2y_smth'])
+    #yf = fft(y)
+    #xf = np.linspace(0.0, 1.0/(2.0*T), N/2)
+    #fig = plt.figure()
+    #plt.plot(xf, 2.0/N * np.abs(yf[0:N/2]))
+    #plt.grid()
+    #plt.xlim((0,20))
+    #plt.show()
+
+    # By fin beats
+    tailtip = tracklist[trial]['data']['pt2y_smth']
+
+    peakindexes = peakutils.indexes(tailtip, thres=0.05, min_dist=1)
+    troughindexes = peakutils.indexes(-tailtip, thres=0.05, min_dist=1)
+
+    peak_times = time[peakindexes]
+    trough_times = time[troughindexes]
+
+    peak_positions = tailtip[peak_times]
+    trough_positions = tailtip[trough_times]
+
+    if peak_times[0] < trough_times[0] and len(peak_times) == len(trough_times):
+        finbeat_amplitude = peak_positions - trough_positions
+        finbeat_period = trough_times - peak_times
+
+    elif  peak_times[0] < trough_times[0] and len(peak_times) > len(trough_times):
+        finbeat_amplitude = peak_positions[:,len(peak_positions)-1] - trough_positions
+        finbeat_period = trough_times - peak_times[:,len(peak_times)-1]
+
+    elif peak_times[0] < trough_times[0] and len(peak_times) == len(trough_times):
+        finbeat_amplitude = abs(trough_positions - peak_positions)
+        finbeat_period = peak_times - trough_times
+    else:
+        finbeat_amplitude = abs(trough_positions[:,len(trough_positions)-1] - peak_positions)
+        finbeat_period = trough_times[:, len(trough_times) - 1] - peak_times
+
+    finbeat_index = range(len(finbeat_period))
