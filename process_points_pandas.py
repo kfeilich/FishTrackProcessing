@@ -48,12 +48,12 @@ for filename in os.listdir(folder): #For all of the files in the directory
         
         # Calculate First Discrete Differences (Velocity)     
         cols_to_use1 = ['pt1x_smth','pt1y_smth','pt1z_smth','pt2x_smth','pt2y_smth','pt2z_smth']
-        df2 = df.loc[cols_to_use].diff()        
+        df2 = df.loc[:,cols_to_use1].diff()
         df2 = df2.rename(columns = {'pt1z_smth':'pt1z_v', 'pt1x_smth':'pt1x_v', 'pt1y_smth':'pt1y_v', 'pt2z_smth':'pt2z_v','pt2x_smth':'pt2x_v', 'pt2y_smth':'pt2y_v'})    
         
         # Calculate Second Discrete Differences (Acceleration)   
         cols_to_use2 = ['pt1x_v','pt1y_v','pt1z_v','pt2x_v','pt2y_v','pt2z_v']
-        df3 = df2.loc[cols_to_use2].diff()
+        df3 = df2.loc[:,cols_to_use2].diff()
         df3 = df3.rename(columns = {'pt1z_v':'pt1z_a', 'pt1x_v':'pt1x_a', 'pt1y_v':'pt1y_a', 'pt2z_v':'pt2z_a','pt2x_v':'pt2x_a', 'pt2y_v':'pt2y_a'})
 
         # Merge all this shit
