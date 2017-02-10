@@ -24,7 +24,7 @@ root.withdraw()
 folder = 'E:/Digitized Tracks'
 framerate = 500.0
 
-#User input
+#User input - uncomment when done testing
 #folder = filedialog.askdirectory()  #Ask user for directory
 #framerate = float(input('Enter frame rate in frames per second:')) #Probably 500; Note assumes all videos at same framerate
 
@@ -240,7 +240,7 @@ for trial in tracklist:# Iterates over all avalable trials
 
     tail_amplitudes[trial_name] = {'sequence': trial_name, 'fish': fish, 'peak_times': peak_times,
                                    'trough_times': trough_times, 'finbeat_number': len(N_both), 'fin_excursion': fb_amp}
-    tail_periods[trial_name] = {'sequence': trial_name, 'fish': fish}
+    tail_periods[trial_name] = {'sequence': trial_name, 'fish': fish, 'fin_periods': fb_period}
 
     # plot finbeat parameters against acceleration
     fig = plt.figure()
@@ -286,6 +286,43 @@ for trial in tracklist:# Iterates over all avalable trials
     ax3.set_ylabel('Tailbeat Period (s)', color='b')
     ax3.tick_params('y', colors='b')
 
+    ax4 = ax3.twinx()
+    ax4.plot(tracklist[trial]['data'].index.values, -tracklist[trial]['data']['pt1x_v'], 'r.')
+    ax4.set_ylabel('Streamwise Velocity(px/s)', color='r')
+    ax4.tick_params('y', colors='r')
+    plt.show()
+
+######################################################################################################################
+## Calculating finbeat effort
+######################################################################################################################
+for trial in tracklist:# Iterates over all avalable trials
+    trial_name = tracklist[trial]['sequence']
+    fish = tracklist[trial]['fish']
+    species = fish[:-3]
+    fb_num = tail_amplitudes[trial_name]['finbeat_number']
+    fb_periods = tail_periods[trial_name]['fin_periods']
+    fb_amplitudes = tail_amplitudes[trial_name]['fin_excursion'][:-1]
+    fb_peaktimes = tail_amplitudes[trial_name]['peak_times'][0:fb_num-1]
+    fb_effort = fb_amplitudes / fb_periods
+
+
+    fig = plt.figure()
+    fig.suptitle(tracklist[trial]['sequence'])
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax1.plot(fb_peaktimes, fb_effort, 'bo')
+    ax1.set_xlabel('Time (s)')
+    ax1.set_ylabel('Tailbeat Effort (px/s)', color='b')
+    ax1.tick_params('y', colors='b')
+    ax2 = ax1.twinx()
+    ax2.plot(tracklist[trial]['data'].index.values, -tracklist[trial]['data']['pt1x_a'], 'r.')
+    ax2.set_ylabel('Streamwise accel (px/s2)', color='r')
+    ax2.tick_params('y', colors='r')
+
+    ax3 = fig.add_subplot(2, 1, 2)
+    ax3.plot(fb_peaktimes, fb_effort, 'bo')
+    ax3.set_xlabel('Time (s)')
+    ax3.set_ylabel('Tailbeat Effort (px/s)', color='b')
+    ax3.tick_params('y', colors='b')
     ax4 = ax3.twinx()
     ax4.plot(tracklist[trial]['data'].index.values, -tracklist[trial]['data']['pt1x_v'], 'r.')
     ax4.set_ylabel('Streamwise Velocity(px/s)', color='r')
