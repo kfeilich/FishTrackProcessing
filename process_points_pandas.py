@@ -8,6 +8,8 @@ import scipy
 from scipy.signal import savgol_filter  # for smoothing data
 from scipy.fftpack import fft
 from scipy.fftpack import fftfreq
+import matplotlib
+matplotlib.rc('axes.formatter', useoffset=False)
 from mpl_toolkits.mplot3d import Axes3D
 import sys
 import matplotlib.pyplot as plt
@@ -15,19 +17,20 @@ import peakutils
 from peakutils.plot import plot as pplot
 import matplotlib.cm as cm
 
-
 root = tk.Tk()
 root.withdraw()
+
 ######################################################################
 # Data Extraction
 ######################################################################
-framerate = 500.0  # comment out for user input
-folder = 'E:/Digitized tracks'  # comment out for user input
+trial_info = pd.read_csv('D:/Acceleration/Digitized tracks/Trial_info.csv',
+                         sep=',')
+trial_info = trial_info.set_index('Trial_name')
+folder = 'D:/Acceleration/Digitized tracks'  # comment out for user input
 
 #  Uncomment for User Input
 # folder = filedialog.askdirectory()  #Ask user for directory
 # framerate = float(input('Enter frame rate in frames per second:'))
-# Framerate is probably 500, assumes all videos at same  frame rate
 
 # Initialize a list of dictionaries to contain each trial's data
 tracklist = {}
@@ -42,11 +45,24 @@ for filename in os.listdir(folder):  # For all files in the directory
         fish = file_info[0]
         sequence = file_info[1]
         trial_name = fish+sequence
-        
+        framerate = trial_info['FPS'][trial_name]
+        L_calib = trial_info['ScaleL_cm/px'][trial_name]
+        V_calib = trial_info['ScaleV_cm/px'][trial_name]
+        init_Speed = trial_info['InitialSpd_cm'][trial_name]
+        fish_TL = trial_info['Fish_TL_cm'][trial_name]
+
         df = pd.read_csv(filepath, sep=',')
         df = df.rename(columns={'pt1_cam1_Y': 'pt1z', 'pt1_cam2_X': 'pt1x',
                                 'pt1_cam2_Y': 'pt1y', 'pt2_cam1_Y': 'pt2z',
                                 'pt2_cam2_X': 'pt2x', 'pt2_cam2_Y': 'pt2y'})
+
+        # Convert position to cm
+        df['pt1z'] = df['pt1z']*L_calib
+        df['pt1x'] = df['pt1x']*V_calib
+        df['pt1y'] = df['pt1y']*V_calib
+        df['pt2z'] = df['pt2z']*L_calib
+        df['pt2x'] = df['pt2x']*V_calib
+        df['pt2y'] = df['pt2y']*V_calib
 
         # Generate time array
         df['time'] = np.linspace(0, len(df['pt1x'])*(1.0/framerate),
@@ -76,6 +92,10 @@ for filename in os.listdir(folder):  # For all files in the directory
             'pt1z_smth': 'pt1z_v', 'pt1x_smth': 'pt1x_v',
             'pt1y_smth': 'pt1y_v', 'pt2z_smth': 'pt2z_v',
             'pt2x_smth': 'pt2x_v', 'pt2y_smth': 'pt2y_v'})
+
+        # Add initial x-velocity
+        df2['pt1x_v'] = df2['pt1x_v'].sub(init_Speed)  # Because - is forward
+        df2['pt2x_v'] = df2['pt2x_v'].sub(init_Speed)  # Because - is forward
 
         # Smooth velocity data using savitzky golay
         df2['pt1x_v_smth'] = scipy.signal.savgol_filter(
@@ -107,7 +127,7 @@ for filename in os.listdir(folder):  # For all files in the directory
         
         # Put all of these into the appropriate object in tracklist
         tracklist[trial_name] = {'sequence': trial_name, 'fish': fish,
-                                 'data': df}
+                                 'fish_TL': fish_TL, 'data': df}
         
         # Advance the count
         count = count + 1
@@ -137,7 +157,7 @@ for trial in tracklist:  # Iterates over all available trials
     # ax.set_xlim3d(0,1000)
     # ax.set_ylim3d(0,1000)
     # ax.set_zlim3d(0,1000)
-    ax.autoscale(enable=True, tight=None)
+    ax.autoscale(enable=True, tight=True)
     ax.set_xlabel('X position')
     ax.set_ylabel('Y position')
     ax.set_zlabel('Z position')
@@ -156,7 +176,7 @@ for trial in tracklist:  # Iterates over all available trials
     # ax2.set_xlim3d(0,1000)
     # ax2.set_ylim3d(0,1000)
     # ax2.set_zlim3d(0,1000)
-    ax.autoscale(enable=True, tight=None)
+    ax.autoscale(enable=True, tight=True)
     ax.set_xlabel('X position')
     ax.set_ylabel('Y position')
     ax.set_zlabel('Z position')
@@ -173,7 +193,7 @@ for trial in tracklist:  # Iterates over all available trials
     # ax3.set_xlim3d(0,1000)
     # ax3.set_ylim3d(0,1000)
     # ax3.set_zlim3d(0,1000)
-    ax.autoscale(enable=True, tight=None)
+    ax.autoscale(enable=True, tight=True)
     ax.set_xlabel('X position')
     ax.set_ylabel('Y position')
     ax.set_zlabel('Z position')
@@ -190,7 +210,7 @@ for trial in tracklist:  # Iterates over all available trials
     # #ax4.set_xlim3d(0,1000)
     # #ax4.set_ylim3d(0,1000)
     # #ax4.set_zlim3d(0,1000)
-    ax.autoscale(enable=True, tight=None)
+    ax.autoscale(enable=True, tight=True)
     ax.set_xlabel('X position')
     ax.set_ylabel('Y position')
     ax.set_zlabel('Z position')
@@ -309,12 +329,12 @@ for trial in tracklist:  # Iterates over all avalable trials
     ax1 = fig.add_subplot(2, 1, 1)
     ax1.plot(beat_times, fb_amp, 'bo')
     ax1.set_xlabel('Time (s)')
-    ax1.set_ylabel('Tail Excursion (px)', color='b')
+    ax1.set_ylabel('Tail Excursion (cm)', color='b')
     ax1.tick_params('y', colors='b')
     ax2 = ax1.twinx()
     ax2.plot(tracklist[trial]['data'].index.values,
              -tracklist[trial]['data']['pt1x_a'], 'r.')
-    ax2.set_ylabel('Streamwise accel (px/s2)', color='r')
+    ax2.set_ylabel('Streamwise accel (cm/s2)', color='r')
     ax2.tick_params('y', colors='r')
 
     ax3 = fig.add_subplot(2, 1, 2)
@@ -326,7 +346,7 @@ for trial in tracklist:  # Iterates over all avalable trials
     ax4 = ax3.twinx()
     ax4.plot(tracklist[trial]['data'].index.values,
              -tracklist[trial]['data']['pt1x_a'], 'r.')
-    ax4.set_ylabel('Streamwise accel (px/s2)', color='r')
+    ax4.set_ylabel('Streamwise accel (cm/s2)', color='r')
     ax4.tick_params('y', colors='r')
     plt.show()
 
@@ -336,12 +356,12 @@ for trial in tracklist:  # Iterates over all avalable trials
     ax1 = fig.add_subplot(2, 1, 1)
     ax1.plot(beat_times, fb_amp, 'bo')
     ax1.set_xlabel('Time (s)')
-    ax1.set_ylabel('Tail Excursion (px)', color='b')
+    ax1.set_ylabel('Tail Excursion (cm)', color='b')
     ax1.tick_params('y', colors='b')
     ax2 = ax1.twinx()
     ax2.plot(tracklist[trial]['data'].index.values,
              -tracklist[trial]['data']['pt1x_v'], 'r.')
-    ax2.set_ylabel('Streamwise Velocity (px/s)', color='r')
+    ax2.set_ylabel('Streamwise Velocity (cm/s)', color='r')
     ax2.tick_params('y', colors='r')
 
     ax3 = fig.add_subplot(2, 1, 2)
@@ -353,7 +373,7 @@ for trial in tracklist:  # Iterates over all avalable trials
     ax4 = ax3.twinx()
     ax4.plot(tracklist[trial]['data'].index.values,
              -tracklist[trial]['data']['pt1x_v'], 'r.')
-    ax4.set_ylabel('Streamwise Velocity(px/s)', color='r')
+    ax4.set_ylabel('Streamwise Velocity(cm/s)', color='r')
     ax4.tick_params('y', colors='r')
     plt.show()
 
@@ -375,22 +395,22 @@ for trial in tracklist:  # Iterates over all avalable trials
     ax1 = fig.add_subplot(2, 1, 1)
     ax1.plot(fb_peaktimes, fb_effort, 'bo')
     ax1.set_xlabel('Time (s)')
-    ax1.set_ylabel('Tailbeat Effort (px/s)', color='b')
+    ax1.set_ylabel('Tailbeat Effort (cm/s)', color='b')
     ax1.tick_params('y', colors='b')
     ax2 = ax1.twinx()
     ax2.plot(tracklist[trial]['data'].index.values,
              -tracklist[trial]['data']['pt1x_a'], 'r.')
-    ax2.set_ylabel('Streamwise accel (px/s2)', color='r')
+    ax2.set_ylabel('Streamwise accel (cm/s2)', color='r')
     ax2.tick_params('y', colors='r')
 
     ax3 = fig.add_subplot(2, 1, 2)
     ax3.plot(fb_peaktimes, fb_effort, 'bo')
     ax3.set_xlabel('Time (s)')
-    ax3.set_ylabel('Tailbeat Effort (px/s)', color='b')
+    ax3.set_ylabel('Tailbeat Effort (cm/s)', color='b')
     ax3.tick_params('y', colors='b')
     ax4 = ax3.twinx()
     ax4.plot(tracklist[trial]['data'].index.values,
              -tracklist[trial]['data']['pt1x_v'], 'r.')
-    ax4.set_ylabel('Streamwise Velocity(px/s)', color='r')
+    ax4.set_ylabel('Streamwise Velocity(cm/s)', color='r')
     ax4.tick_params('y', colors='r')
     plt.show()
