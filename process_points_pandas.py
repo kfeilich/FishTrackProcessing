@@ -1,21 +1,21 @@
 # Load all of the things
 import tkinter as tk
 import os
-from tkinter import filedialog  # For folder input popup
 import pandas as pd
 import numpy as np
 import scipy
-from scipy.signal import savgol_filter  # for smoothing data
-from scipy.fftpack import fft
-from scipy.fftpack import fftfreq
+import matplotlib.cm as cm
 import matplotlib
-matplotlib.rc('axes.formatter', useoffset=False)
-from mpl_toolkits.mplot3d import Axes3D
 import sys
 import matplotlib.pyplot as plt
 import peakutils
+from scipy.signal import savgol_filter  # for smoothing data
+from scipy.fftpack import fft
+from scipy.fftpack import fftfreq
+from mpl_toolkits.mplot3d import Axes3D
 from peakutils.plot import plot as pplot
-import matplotlib.cm as cm
+from tkinter import filedialog  # For folder input popup
+matplotlib.rc('axes.formatter', useoffset=False)
 
 root = tk.Tk()
 root.withdraw()
@@ -23,10 +23,12 @@ root.withdraw()
 ######################################################################
 # Data Extraction
 ######################################################################
-trial_info = pd.read_csv('D:/Acceleration/Digitized tracks/Trial_info.csv',
+trial_info = pd.read_csv('C:\Users\Kara\PycharmProjects\FishTrackProcessing\Data\Trial_info.csv',
                          sep=',')
 trial_info = trial_info.set_index('Trial_name')
-folder = 'D:/Acceleration/Digitized tracks'  # comment out for user input
+
+# Comment out for user input
+folder = 'C:\Users\Kara\PycharmProjects\FishTrackProcessing\Data'
 
 #  Uncomment for User Input
 # folder = filedialog.askdirectory()  #Ask user for directory
