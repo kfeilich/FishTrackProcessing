@@ -1,0 +1,17 @@
+Trial_name,Species,Fish,Sequence,InitialSpd_rpm,InitialSpd_cm,Fish_TL_cm,InitialSpd_BLs,ScaleL_cm/px,ScaleV_cm/px,Behavior,FPS
+BTrout2S14a,Btrout,BTrout2,BTrout2S14a,66,7.5189,8.5,0.884576471,0.026873268,0.032147725,A,1000
+BassS18,Bass,Bass1,BassS18,117,14.715,15,0.981,0.02696508,0.032094589,A,1000
+BTrout2S01,BTrout,BTrout2,BTrout2S01,133,16.9726,8.5,1.996776471,0.027015783,0.032074927,A,500
+BTrout1S08,Btrout,BTrout1,BTrout1S08,281,37.8554,9,4.206155556,0.027362,0.032135,A,500
+BassS08,Bass,Bass1,BassS08,235,31.3648,15,2.090986667,0.02696508,0.032094589,A,1000
+BTrout2S02,Btrout,BTrout2,BTrout2S02,133,16.9726,8.5,1.996776471,0.027015783,0.032074927,A,500
+BassS14,Bass,Bass1,BassS14,117,14.715,15,0.981,0.02696508,0.032094589,A,1000
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,

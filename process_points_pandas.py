@@ -71,18 +71,18 @@ for filename in os.listdir(folder):  # For all files in the directory
        
         # Smooth position data using savitzky golay
         df['pt1x_smth'] = scipy.signal.savgol_filter(
-            df['pt1x'], window_length=121, polyorder=3)
+            df['pt1x'], window_length=101, polyorder=2)
         df['pt1y_smth'] = scipy.signal.savgol_filter(
-            df['pt1y'], window_length=121, polyorder=3)
+            df['pt1y'], window_length=101, polyorder=2)
         df['pt1z_smth'] = scipy.signal.savgol_filter(
-            df['pt1z'], window_length=121, polyorder=3)
+            df['pt1z'], window_length=101, polyorder=2)
         
         df['pt2x_smth'] = scipy.signal.savgol_filter(
-            df['pt2x'], window_length=121, polyorder=3)
+            df['pt2x'], window_length=101, polyorder=2)
         df['pt2y_smth'] = scipy.signal.savgol_filter(
-            df['pt2y'], window_length=121, polyorder=3)
+            df['pt2y'], window_length=101, polyorder=2)
         df['pt2z_smth'] = scipy.signal.savgol_filter(
-            df['pt2z'], window_length=121, polyorder=3)
+            df['pt2z'], window_length=101, polyorder=2)
         
         # Calculate First Discrete Differences (Velocity)     
         cols_to_use1 = ['pt1x_smth', 'pt1y_smth', 'pt1z_smth', 'pt2x_smth',
@@ -135,7 +135,7 @@ for filename in os.listdir(folder):  # For all files in the directory
 ########################################################################
 # Plotting
 ########################################################################
-for trial in tracklist:  # Iterates over all available trials
+'''for trial in tracklist:  # Iterates over all available trials
 
     # Scale time for colormap
     scaled_time = (tracklist[trial]['data'].index.values -
@@ -248,7 +248,7 @@ for trial in tracklist:  # Iterates over all available trials
                 c=colors, edgecolor='none')
     plt.colorbar(m, shrink=0.5, aspect=10)
     plt.show()
-
+'''
 ########################################################################
 # Finding Tail Beat Frequency and Amplitude
 ########################################################################
@@ -277,9 +277,12 @@ for trial in tracklist:  # Iterates over all avalable trials
     # Get tailbeat position
     tailtip = tracklist[trial]['data']['pt2y_smth']
     # Find finbeat peaks
-    peakindexes = peakutils.indexes(tailtip, thres=0.05, min_dist=1)
+    peakindexes = peakutils.indexes(tailtip, thres=0.4, min_dist=20)
+    fig = plt.figure()
+    pplot(time, tailtip, peakindexes)
+    plt.show()
     # Find finbeat troughs
-    troughindexes = peakutils.indexes(-tailtip, thres=0.05, min_dist=1)
+    troughindexes = peakutils.indexes(-tailtip, thres=0.4, min_dist=20)
     # Find when the peaks are
     peak_times = time[peakindexes]
     # Find when the troughs are
@@ -322,7 +325,7 @@ for trial in tracklist:  # Iterates over all avalable trials
                                    'fin_excursion': fb_amp}
     tail_periods[trial_name] = {'sequence': trial_name, 'fish': fish,
                                 'fin_periods': fb_period}
-
+    '''
     # plot finbeat parameters against acceleration
     fig = plt.figure()
     fig.suptitle(tracklist[trial]['sequence'])
@@ -375,22 +378,30 @@ for trial in tracklist:  # Iterates over all avalable trials
              -tracklist[trial]['data']['pt1x_v'], 'r.')
     ax4.set_ylabel('Streamwise Velocity(cm/s)', color='r')
     ax4.tick_params('y', colors='r')
-    plt.show()
+    plt.show()'''
 
 ########################################################################
 # Calculating finbeat effort
 ########################################################################
+finbeat_params = {}
 for trial in tracklist:  # Iterates over all avalable trials
     trial_name = tracklist[trial]['sequence']
     fish = tracklist[trial]['fish']
-    species = fish[:-3]
+    species = fish
     fb_num = tail_amplitudes[trial_name]['finbeat_number']
     fb_periods = tail_periods[trial_name]['fin_periods']
     fb_amplitudes = tail_amplitudes[trial_name]['fin_excursion'][:-1]
     fb_peaktimes = tail_amplitudes[trial_name]['peak_times'][0:fb_num-1]
     fb_effort = fb_amplitudes / fb_periods
 
-    fig = plt.figure()
+    finbeat_params[trial_name] = {'trial_name': trial_name, 'fish': fish,
+                                  'species': species, 'N_finbeats': fb_num,
+                                  'finbeat_peak_times': fb_peaktimes,
+                                  'finbeat_amplitudes': fb_amplitudes,
+                                  'finbeat_periods': fb_periods,
+                                  'finbeat_effort': fb_effort}
+
+    '''fig = plt.figure()
     fig.suptitle(tracklist[trial]['sequence'])
     ax1 = fig.add_subplot(2, 1, 1)
     ax1.plot(fb_peaktimes, fb_effort, 'bo')
@@ -413,4 +424,8 @@ for trial in tracklist:  # Iterates over all avalable trials
              -tracklist[trial]['data']['pt1x_v'], 'r.')
     ax4.set_ylabel('Streamwise Velocity(cm/s)', color='r')
     ax4.tick_params('y', colors='r')
-    plt.show()
+    plt.show() '''
+
+###############################################################################
+# Calculating Maximum Acceleration Between a Peak and the Following Trough
+###############################################################################
