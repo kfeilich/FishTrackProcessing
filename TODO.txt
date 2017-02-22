@@ -1,0 +1,18 @@
+For process_points_pandas.py
+TODO: FIX THE GDAMN PEAKFINDING/ FINBEAT PERIOD, TIMING, AMPLITUDE CALC
+        PORTION OF PROCESS_POINT_PANDAS
+
+
+For plot_track.py
+TODO: Write documentation for plot_track
+TODO: Test plot_track
+    TODO: If possible, make process_points easier by calling plot_track
+
+For plot_finbeat.py
+TODO: Add functionality to plot currently unused variables in plot_finbeat
+
+For analysis eventually -- should probably go in process_points:
+TODO: Plot caudal effort against instantaneous speed, classified by species
+        and behavior.
+        Use DFA within species for different behaviors.
+        Make sure points from the same trial are recognizable.

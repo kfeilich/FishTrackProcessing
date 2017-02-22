@@ -1,78 +1,150 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb  6 14:24:53 2017
-
-@author: Kara
-"""
-from mpl_toolkits.mplot3d import Axes3D
-import sys
-import numpy as np
+# Load all of the things
+import os
+import matplotlib
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-import scipy
+import sys
+from mpl_toolkits.mplot3d import Axes3D
+matplotlib.rc('axes.formatter', useoffset=False)
+
+def plot_tracks(tracklist_subset, tracklist):
+    # TODO
+    """Plot the 3D position, streamwise velocity, and streamwise accel of the
+        snout and the tail tip from data as produced
+        by process_points_pandas.py.
+
+       Parameters
+       ----------
+       tracklist_subset : 1D array_like
+           List of strings indicating sequence names of desired trials.         
+       tracklist : pandas dataframe
+           tracklist dataframe produced by process_points_pandas.py
+
+       Returns
+       -------
+
+       Notes
+       -----
 
 
+       References
+       ----------
 
-scaled_time = (data.index.values - data.index.values.min()) / data.index.ptp()  # scale time for colormap
-colors = plt.cm.cubehelix(scaled_time)  # pull from colormap (here cubehelix)
+       Examples
+       --------
+       """
 
-#Raw Plot Pt 1, 3D
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.scatter3D(xs=pt1x, ys=pt1y, zs=pt1z,zdir='z', s=3,c=colors, marker='o', edgecolor='none')#Scatter plot
-#ax.set_xlim3d(0,1000)
-#ax.set_ylim3d(0,1000)
-#ax.set_zlim3d(0,1000)
-ax.autoscale(enable=True, tight=None)
-fig.colorbar(cubehelix, shrink=0.5, aspect=10)
-plt.show()
+    for trial in tracklist_subset:  # Iterates over all available trials
 
-#Raw Plot Pt 2, 3D
-fig2 = plt.figure()
-ax2 = fig2.add_subplot(111, projection='3d')
-ax2.scatter3D(xs=pt2x, ys=pt2y, zs=pt2z, zdir='z', s=3,c=colors, marker='o', edgecolor='none')#Scatter plot
-#ax2.set_xlim3d(0,1000)
-#ax2.set_ylim3d(0,1000)
-#ax2.set_zlim3d(0,1000)
-ax2.autoscale(enable=True, tight=None)
-plt.show()
+        # Scale time for colormap
+        scaled_time = (tracklist[trial]['data'].index.values -
+                       tracklist[trial]['data'].index.values.min()) / \
+                      tracklist[trial]['data'].index.values.ptp()
+        # Pull from colormap (here cubehelix)
+        colors = plt.cm.cubehelix(scaled_time)
 
-#Smoothed Data Pt 1, 3D
-fig3 = plt.figure()
-ax3 = fig3.add_subplot(111, projection='3d')
-ax3.scatter3D(xs=pt1x_smth, ys=pt1y_smth, zs=pt1z_smth,zdir='z', s=3,c=colors, marker='o', edgecolor='none')#Scatter plot
-#ax3.set_xlim3d(0,1000)
-#ax3.set_ylim3d(0,1000)
-#ax3.set_zlim3d(0,1000)
-ax3.autoscale(enable=True, tight=None)
-plt.show()
+        # Raw Plot Pt 1, 3D
+        fig = plt.figure()
+        fig.suptitle(tracklist[trial]['sequence'])
+        ax = fig.add_subplot(4, 2, 1, projection='3d')
+        ax.set_title('Pt 1 Raw Position')
+        p = ax.scatter3D(xs=tracklist[trial]['data']['pt1x'],
+                         ys=tracklist[trial]['data']['pt1y'],
+                         zs=tracklist[trial]['data']['pt1z'],
+                         zdir='z', s=3, c=colors, marker='o',
+                         edgecolor='none')  # 3D Scatter plot
+        # ax.set_xlim3d(0,1000)
+        # ax.set_ylim3d(0,1000)
+        # ax.set_zlim3d(0,1000)
+        ax.autoscale(enable=True, tight=True)
+        ax.set_xlabel('X position')
+        ax.set_ylabel('Y position')
+        ax.set_zlabel('Z position')
+        m = cm.ScalarMappable(cmap=cm.cubehelix)
+        m.set_array(tracklist[trial]['data'].index.values)
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-#Smoothed Dara Pt 2, 3D
-fig4 = plt.figure()
-ax4 = fig4.add_subplot(111, projection='3d')
-ax4.scatter3D(xs=pt2x_smth, ys=pt2y_smth, zs=pt2z_smth,zdir='z', s=3,c=colors, marker='o', edgecolor='none')#Scatter plot
-#ax4.set_xlim3d(0,1000)
-#ax4.set_ylim3d(0,1000)
-#ax4.set_zlim3d(0,1000)
-ax4.autoscale(enable=True, tight=None)
-plt.show()
+        # Raw Plot Pt 2, 3D
+        ax = fig.add_subplot(4, 2, 2, projection='3d')
+        ax.set_title('Pt 2 Raw Position')
+        p2 = ax.scatter3D(xs=tracklist[trial]['data']['pt2x'],
+                          ys=tracklist[trial]['data']['pt2y'],
+                          zs=tracklist[trial]['data']['pt2z'],
+                          zdir='z', s=3, c=colors, marker='o',
+                          edgecolor='none')  # 3D Scatter plot
+        # ax2.set_xlim3d(0,1000)
+        # ax2.set_ylim3d(0,1000)
+        # ax2.set_zlim3d(0,1000)
+        ax.autoscale(enable=True, tight=True)
+        ax.set_xlabel('X position')
+        ax.set_ylabel('Y position')
+        ax.set_zlabel('Z position')
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-#DERIVATIVES -- VELOCITY
-pt1x_v = np.ediff1d(pt1x_smth)
-pt1y_v = np.ediff1d(pt1y_smth)
-pt1z_v = np.ediff1d(pt1z_smth)
+        # Smoothed Data Pt 1, 3D
+        ax = fig.add_subplot(4, 2, 3, projection='3d')
+        ax.set_title('Pt 1 Smoothed Position')
+        p3 = ax.scatter3D(xs=tracklist[trial]['data']['pt1x_smth'],
+                          ys=tracklist[trial]['data']['pt1y_smth'],
+                          zs=tracklist[trial]['data']['pt1z_smth'],
+                          zdir='z', s=3, c=colors, marker='o',
+                          edgecolor='none')  # Scatter plot
+        # ax3.set_xlim3d(0,1000)
+        # ax3.set_ylim3d(0,1000)
+        # ax3.set_zlim3d(0,1000)
+        ax.autoscale(enable=True, tight=True)
+        ax.set_xlabel('X position')
+        ax.set_ylabel('Y position')
+        ax.set_zlabel('Z position')
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-pt2x_v = np.ediff1d(pt2x_smth)
-pt2y_v = np.ediff1d(pt2y_smth)
-pt2z_v = np.ediff1d(pt2z_smth)
+        # Smoothed Data Pt 2, 3D
+        ax = fig.add_subplot(4, 2, 4, projection='3d')
+        ax.set_title('Pt 2 Smoothed Position')
+        p4 = ax.scatter3D(xs=tracklist[trial]['data']['pt2x_smth'],
+                          ys=tracklist[trial]['data']['pt2y_smth'],
+                          zs=tracklist[trial]['data']['pt2z_smth'],
+                          zdir='z', s=3, c=colors, marker='o',
+                          edgecolor='none')  # Scatter plot
+        # #ax4.set_xlim3d(0,1000)
+        # #ax4.set_ylim3d(0,1000)
+        # #ax4.set_zlim3d(0,1000)
+        ax.autoscale(enable=True, tight=True)
+        ax.set_xlabel('X position')
+        ax.set_ylabel('Y position')
+        ax.set_zlabel('Z position')
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-time_v = time[:len(time)-1]
+        # Streamwise Velocity Pt 1
+        ax = fig.add_subplot(4, 2, 5)
+        ax.set_title('Pt 1 Streamwise Velocity')
+        plt.scatter(x=tracklist[trial]['data'].index.values,
+                    y=-tracklist[trial]['data']['pt1x_v_smth'],
+                    c=colors, edgecolor='none')
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-#PLOT WHATEVS
-plt.scatter(x = time_v, y=-pt1x_v)
-plt.show()
+        # Streamwise Velocity Pt 2
+        ax = fig.add_subplot(4, 2, 6)
+        ax.set_title('Pt 2 Streamwise Velocity')
+        plt.scatter(x=tracklist[trial]['data'].index.values,
+                    y=-tracklist[trial]['data']['pt2x_v_smth'],
+                    c=colors, edgecolor='none')
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-time_a = time_v[:len(time_v)-1]
+        # Streamwise Accel Pt 1
+        ax = fig.add_subplot(4, 2, 7)
+        ax.set_title('Pt 1 Streamwise Acceleration')
+        plt.scatter(x=tracklist[trial]['data'].index.values,
+                    y=-tracklist[trial]['data']['pt1x_a'],
+                    c=colors, edgecolor='none')
+        plt.colorbar(m, shrink=0.5, aspect=10)
 
-
-plt.scatter(y=-pt1x_a, x = time_a, )
-plt.show()
+        # Streamwise Accel Pt 2
+        ax = fig.add_subplot(4, 2, 8)
+        ax.set_title('Pt 2 Streamwise Acceleration')
+        plt.scatter(x=tracklist[trial]['data'].index.values,
+                    y=-tracklist[trial]['data']['pt2x_a'],
+                    c=colors, edgecolor='none')
+        plt.colorbar(m, shrink=0.5, aspect=10)
+        plt.show()
+    '''
