@@ -49,6 +49,7 @@ for filename in os.listdir(folder):  # For all files in the directory
         V_calib = trial_info['ScaleV_cm/px'][trial_name]
         init_Speed = trial_info['InitialSpd_cm'][trial_name]
         fish_TL = trial_info['Fish_TL_cm'][trial_name]
+        behavior = trial_info['Behavior'][trial_name]
 
         df = pd.read_csv(filepath, sep=',')
         df = df.rename(columns={'pt1_cam1_Y': 'pt1z', 'pt1_cam2_X': 'pt1x',
@@ -92,9 +93,17 @@ for filename in os.listdir(folder):  # For all files in the directory
             'pt1y_smth': 'pt1y_v', 'pt2z_smth': 'pt2z_v',
             'pt2x_smth': 'pt2x_v', 'pt2y_smth': 'pt2y_v'})
 
+        # Making forward, up positive
+        df2['pt1x_v'] = -df2['pt1x_v']
+        df2['pt1y_v'] = -df2['pt1y_v']
+        df2['pt1z_v'] = -df2['pt1z_v']
+        df2['pt2x_v'] = -df2['pt2x_v']
+        df2['pt2y_v'] = -df2['pt2y_v']
+        df2['pt2z_v'] = -df2['pt2z_v']
+
         # Add initial x-velocity
-        df2['pt1x_v'] = df2['pt1x_v'].sub(init_Speed)  # Because - is forward
-        df2['pt2x_v'] = df2['pt2x_v'].sub(init_Speed)  # Because - is forward
+        df2['pt1x_v'] = df2['pt1x_v'].add(init_Speed)
+        df2['pt2x_v'] = df2['pt2x_v'].add(init_Speed)
 
         # Smooth velocity data using savitzky golay
         df2['pt1x_v_smth'] = scipy.signal.savgol_filter(
@@ -126,8 +135,8 @@ for filename in os.listdir(folder):  # For all files in the directory
         
         # Put all of these into the appropriate object in tracklist
         tracklist[trial_name] = {'sequence': trial_name, 'fish': fish,
-                                 'fish_TL': fish_TL, 'data': df}
-        
+                                 'fish_TL': fish_TL, 'behavior': behavior,
+                                 'data': df}
         # Advance the count
         count = count + 1
 
