@@ -18,5 +18,3 @@ finbeats = finbeat_calc(tracklist.keys(), tracklist)
 
 """If you want to plot the peaks and troughs on the position data,
 uncomment section in finbeat_calc"""
-
-

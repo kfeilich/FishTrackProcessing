@@ -16,6 +16,39 @@ root = tk.Tk()
 root.withdraw()
 
 def extract_data():
+    """Extracts fish position calculates velocities & acceleration.
+
+    This function extracts data from a directory of one or more
+    .xypts.csv files, assuming they track the snout of a fish (pt 1)
+    and the tail of the fish (pt 2) from a lateral (vid 1) and a ventral
+    (vid 2) view. Trial information is taken from a trial_info.csv file
+    in the same directory. Position data is prepared for differentiation
+    to velocity using a Savitsky-Golay filter, and velocity is also
+    smoothed for differentiation to accelerations. All of these,
+    and other trial information are returned as a dictionary tracklist,
+    with each key representing one trial. Each key accesses the data and
+    trial info for that trial.
+
+    Args:
+        None (hardcoded)
+
+    Returns:
+        tracklist['trial'] (dict): each key referring to its own
+        dictionary with the following entries:
+            tracklist['trial']['sequence'] (str): name of trial
+            tracklist['trial']['fish'] (str): name of fish
+            tracklist['trial']['fish_TL'](float): fish total length
+            tracklist['trial']['FPS'](int): frame rate in frames/second
+            tracklist['trial']['behavior'](str): behavior as coded by
+                                                filmer.
+                                                'A': linear acc.
+                                                'B': burst acc.
+                                                'S': steady swim
+            tracklist['trial']['data'] (DataFrame): trial data, w/ the
+                                             entries as defined inline
+
+    """
+
     trial_info = pd.read_csv(
         r'C:\Users\Kara\PycharmProjects\FishTrackProcessing\Data\Trial_info.csv',
         sep=',')

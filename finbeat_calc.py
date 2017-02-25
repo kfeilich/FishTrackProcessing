@@ -15,6 +15,48 @@ root = tk.Tk()
 root.withdraw()
 
 def finbeat_calc(tracklist_subset, tracklist):
+    """Determines finbeat peaks, troughs, and timings for each trial
+
+    This function takes the trial information and data for a
+    subset of the trials in a tracklist compiled by extract_data(),
+    and finds the fin beat peaks and troughs in the tail (pt 2)
+    position data. Using the module peakutils, this function
+    prepares the position data for peak finding by fitting and
+    removing a linear baseline for each trial, and produces indices
+    and values for the peaks and troughs. It returns a dictionary
+    containing the timing, magnitude, and type of the local extrema
+    for each trial.
+
+    Args:
+        tracklist_subset (list): a list of strings with the trial
+                            names of the desired trials from tracklist.
+                             Note: The list (even of a single
+                             element) must be contained in square
+                             brackets.
+                             Also note: Alternatively, to iterate
+                             over all trials, set this to
+                             tracklist.keys()
+        tracklist (dict): a tracklist produced by extract_data()
+
+    Returns:
+        finbeats[trial_name] (dict): each key referring to its own
+        dictionary with the following entries:
+            finbeats[trial_name]['trial_name'](str): name of trial
+            finbeats[trial_name]['behavior'](str): behavior as coded by
+                                                filmer.
+                                                'A': linear acc.
+                                                'B': burst acc.
+                                                'S': steady swim
+            finbeats[trial_name]['fish'] (str): name of fish
+            finbeats[trial_name]['fb_data'] (DataFrame): fin beat data
+                                            with the following columns:
+                    ['fb_data']['time'] (floats): timestamp in seconds
+                    ['fb_data']['ypos'] (floats): pos. of tail tip in cm
+                    ['fb_data']['type'] (str): denotes phase of finbeat.
+                                                'P' = peak
+                                                'T' = trough
+    """
+
     finbeats = {}
 
     for trial in tracklist_subset:  # Iterate over desired trials
