@@ -32,6 +32,7 @@ def plot_accel(tracklist_subset, tracklist):
            Examples
            --------
            """
+    tracklist_subset = input("Input Desired Trial Subset as List")
     for trial in tracklist_subset:  # Iterates over all available trials
 
         # Scale time for colormap

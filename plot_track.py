@@ -9,7 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 matplotlib.rc('axes.formatter', useoffset=False)
 
 
-def plot_tracks(tracklist_subset, tracklist):
+def plot_track(tracklist_subset, tracklist):
     # TODO
     """Plot the 3D position, streamwise velocity, and streamwise accel of the
         snout and the tail tip from data as produced
