@@ -41,6 +41,7 @@ def plot_accel(tracklist_subset, tracklist):
                       tracklist[trial]['data'].index.values.ptp()
         timemax = max(tracklist[trial]['data'].index.values)
         data = tracklist[trial]['data']
+        # filename = str(trial) + '.pdf'
 
         fig = plt.figure(figsize=(20, 10))
         fig.suptitle(tracklist[trial]['sequence'] + ' ' +
@@ -55,4 +56,5 @@ def plot_accel(tracklist_subset, tracklist):
         ax1.set_xlabel('Time (s)')
         ax2.tick_params('y', colors='r')
         plt.axhline(0, color='r', linewidth=4, linestyle='dashed')
+        # plt.savefig(filename)
         plt.show()
