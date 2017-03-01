@@ -75,7 +75,7 @@ def plot_track(tracklist_subset, tracklist):
         fig.set_figheight(20)
         fig.set_figwidth(15)
         fig.suptitle(tracklist[trial]['sequence'] + ' ' +
-                     tracklist['trial']['behavior'])
+                     tracklist[trial]['behavior'])
         ax1 = fig.add_subplot(4, 2, 1, projection='3d')
         ax1.set_title('Pt 1 Raw Position')
         ax1.scatter3D(xs=tracklist[trial]['data']['pt1x'],
