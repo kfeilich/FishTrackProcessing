@@ -15,6 +15,7 @@ finbeats = finbeat_calc(tracklist.keys(), tracklist)
 # Plot things if desired
 # plot_track(['sometrial'], tracklist)
 # plot_accel(['sometrial'], tracklist)
+# plot_net_accel(['sometrial'], tracklist)
 
-"""If you want to plot the peaks and troughs on the position data,
-uncomment section in finbeat_calc"""
+# """If you want to plot the peaks and troughs on the position data,
+# uncomment section in finbeat_calc"""

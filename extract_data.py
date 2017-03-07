@@ -75,12 +75,14 @@ def extract_data():
             fish = file_info[0]
             sequence = file_info[1]
             trial_name = fish + sequence
-            framerate = float(trial_info['FPS'][trial_name])
+            framerate = trial_info['FPS'][trial_name]
             L_calib = trial_info['ScaleL_cm/px'][trial_name]
             V_calib = trial_info['ScaleV_cm/px'][trial_name]
             init_Speed = trial_info['InitialSpd_cm'][trial_name]
             fish_TL = trial_info['Fish_TL_cm'][trial_name]
             behavior = trial_info['Behavior'][trial_name]
+
+            print(trial_name)
 
             df = pd.read_csv(filepath, sep=',')
             df = df.rename(
@@ -169,6 +171,17 @@ def extract_data():
                           left_index=True)
             df = df.merge(df3, how='outer', left_index=True,
                           right_index=True)
+
+            # Calculate net velocity and net accel
+            df['pt1_net_v'] = np.sqrt(df['pt1x_v_smth']**2 + df[
+                'pt1y_v_smth']**2 + df['pt1z_v_smth']**2)
+            df['pt2_net_v'] = np.sqrt(df['pt2x_v_smth'] ** 2 + df[
+                'pt2y_v_smth'] ** 2 + df['pt2z_v_smth'] ** 2)
+
+
+
+            df['pt1_net_a']= df['pt1_net_v'].diff()
+            df['pt2_net_a'] = df['pt2_net_v'].diff()
 
             # Put all of these into the appropriate object in tracklist
             tracklist[trial_name] = {'sequence': trial_name,
