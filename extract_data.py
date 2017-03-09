@@ -82,8 +82,6 @@ def extract_data():
             fish_TL = trial_info['Fish_TL_cm'][trial_name]
             behavior = trial_info['Behavior'][trial_name]
 
-            print(trial_name)
-
             df = pd.read_csv(filepath, sep=',')
             df = df.rename(
                 columns={'pt1_cam1_Y': 'pt1z', 'pt1_cam2_X': 'pt1x',
