@@ -9,7 +9,8 @@ tracklist = extract_data()
 
 # Calculate finbeat peaks and troughs
 
-finbeats = finbeat_calc(tracklist.keys(), tracklist)
+finbeats, finbeat_byP, finbeat_byT = finbeat_calc(tracklist.keys(),
+                                             tracklist)
 
 # Extract finbeat periods, amplitudes, and subsequent accel
 

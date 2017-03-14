@@ -111,4 +111,76 @@ def finbeat_calc(tracklist_subset, tracklist):
         finbeats[trial_name] ={'trial_name': trial_name,
                                'behavior': behavior, 'fish': fish,
                                'fb_data': fbs}
-    return finbeats
+
+    finbeat_byP = {}
+    finbeat_byT = {}
+    # CALCULATE PARAMETERS by PEAK and by TROUGH
+    for trial in tracklist_subset:
+        # Pull trial finbeat data
+        trial_name = tracklist[trial]['sequence']
+        fb_data = finbeats[trial]['fb_data']
+        fb_peak_params = pd.DataFrame()
+        fb_trough_params = pd.DataFrame()
+
+        peaksmask = fb_data.loc[:, 'type'] == 'P'
+        fb_peak_params = fb_data.loc[peaksmask]
+        fb_peak_params['endtime'] = np.nan
+        fb_peak_params['period'] = np.nan
+        fb_peak_params['nxttrough'] = np.nan
+        fb_peak_params['amplitude'] = np.nan
+
+        for i in fb_peak_params.index.values:
+            if i + 2 in fb_peak_params.index.values:
+                fb_peak_params.loc[i, 'endtime'] = fb_peak_params.loc[
+                    i + 2, 'time']
+                fb_peak_params.loc[i, 'period'] = fb_peak_params.loc[
+                                                      i, 'endtime'] - \
+                                                  fb_peak_params.loc[
+                                                      i, 'time']
+            else:
+                fb_peak_params.loc[i, 'endtime'] = np.nan
+                fb_peak_params.loc[i, 'period'] = np.nan
+
+            if i + 1 in fb_data.index.values:
+                fb_peak_params.loc[i, 'nxttrough'] = fb_data.loc[
+                    i + 1, 'ypos']
+                fb_peak_params.loc[i, 'amplitude'] = abs(
+                    fb_peak_params.loc[i, 'nxttrough'] -
+                    fb_peak_params.loc[i, 'ypos'])
+            else:
+                fb_peak_params.loc[i, 'nxttrough'] = np.nan
+                fb_peak_params.loc[i, 'amplitude'] = np.nan
+
+        finbeat_byP[trial_name] = fb_peak_params
+
+        troughsmask = fb_data.loc[:, 'type'] == 'T'
+        fb_trough_params = fb_data.loc[troughsmask]
+        fb_trough_params['endtime'] = np.nan
+        fb_trough_params['period'] = np.nan
+        fb_trough_params['nxtpeak'] = np.nan
+        fb_trough_params['amplitude'] = np.nan
+
+        for i in fb_trough_params.index.values:
+            if i + 2 in fb_trough_params.index.values:
+                fb_trough_params.loc[i, 'endtime'] = \
+                fb_trough_params.loc[i + 2, 'time']
+                fb_trough_params.loc[i, 'period'] = \
+                fb_trough_params.loc[i, 'endtime'] - \
+                fb_trough_params.loc[i, 'time']
+            else:
+                fb_trough_params.loc[i, 'endtime'] = np.nan
+                fb_trough_params.loc[i, 'period'] = np.nan
+
+            if i + 1 in fb_data.index.values:
+                fb_trough_params.loc[i, 'nxtpeak'] = fb_data.loc[
+                    i + 1, 'ypos']
+                fb_trough_params.loc[i, 'amplitude'] = \
+                fb_trough_params.loc[i, 'nxtpeak'] - \
+                fb_trough_params.loc[i, 'ypos']
+            else:
+                fb_trough_params.loc[i, 'nxtpeak'] = np.nan
+                fb_trough_params.loc[i, 'amplitude'] = np.nan
+
+        finbeat_byT[trial_name] = fb_trough_params
+
+    return finbeats, finbeat_byP, finbeat_byT
