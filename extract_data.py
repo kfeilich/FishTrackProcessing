@@ -37,6 +37,7 @@ def extract_data():
         dictionary with the following entries:
             tracklist['trial']['sequence'] (str): name of trial
             tracklist['trial']['fish'] (str): name of fish
+            tracklist['trial']['species'] (str): name of species
             tracklist['trial']['fish_TL'](float): fish total length
             tracklist['trial']['FPS'](int): frame rate in frames/second
             tracklist['trial']['behavior'](str): behavior as coded by
