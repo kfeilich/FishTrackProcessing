@@ -39,14 +39,40 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
         Nothing
     """
     count_n = 0  # start counting finbeats
+
+    #find max initial speed for coloring by speed
+    speeds = []
+    for trial in finbeats_subset:
+        speeds.append(tracklist[trial]['start_spd'])
+    max_spd = max(speeds)
+
+    # find max and min axis limits
+    x_vals = []
+    y_vals = []
+    z_vals = []
+    for trial in finbeats_subset:
+        for finbeat in finbeat_data[trial].index.values:
+            x_vals.append(finbeat_data[trial]['period'][finbeat])
+            y_vals.append(finbeat_data[trial]['amplitude'][finbeat])
+
+    x_max = np.nanmax(x_vals)
+    y_max = np.nanmax(y_vals)
+
+
+    # Pull a colormap
+    cm = plt.get_cmap("YlOrRd")
+
     fig = plt.figure()
     fig.set_figheight(10)
-    fig.set_figwidth(10)
+    fig.set_figwidth(13)
     fig.suptitle(subset_name)
     ax1 = fig.add_subplot(1, 1, 1, projection='3d')
     ax1.set_xlabel('Period (s)')
     ax1.set_ylabel('Amplitude (cm)')
     ax1.set_zlabel('Maximum Accel (cm/s2)')
+    ax1.set_xlim3d(0, x_max)
+    ax1.set_ylim3d(0, y_max)
+
 
     # for each trial of interest
     for trial in finbeats_subset:
@@ -71,14 +97,22 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
             # find the maximum acceleration in that time range
             accel = tracklist[trial]['data'][
                         'pt1_net_a'][start:end].max()
+            z_vals.append(accel)
+
+            # pull the initial speed
+            init_spd = tracklist[trial]['start_spd']
 
             # add the point
-            ax1.scatter3D(xs=period,
+            p=ax1.scatter3D(xs=period,
                           ys=amplitude,
                           zs=accel,
-                          zdir='z', s=20, marker='o', c='black',
-                          edgecolor='none')
+                          zdir='z', s=20, marker='o', c=init_spd,
+                          cmap = cm, edgecolor='none', vmin=0,
+                          vmax=max_spd)
             count_n += 1
-
+    z_max = np.nanmax(z_vals)
+    ax1.set_zlim3d(0, z_max)
+    cbar = plt.colorbar(p)
+    cbar.set_label('Initial Speed (cm/s)', rotation =270)
     plt.show()
     print(count_n)

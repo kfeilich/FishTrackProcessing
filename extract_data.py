@@ -194,6 +194,7 @@ def extract_data():
             tracklist[trial_name] = {'sequence': trial_name,
                                      'fish': fish,
                                      'fish_TL': fish_TL,
+                                     'start_spd': init_Speed,
                                      'species': species,
                                      'FPS': framerate,
                                      'behavior': behavior,
