@@ -4,28 +4,39 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def plot_analysis(subset_name, finbeats_subset, finbeat_info,
+def plot_analysis(subset_name, finbeats_subset, finbeat_data,
                   tracklist):
-    """
+    """Plots finbeats in (period, amplitude, acceleration) space.
+    
+    This function takes finbeat data from a specified output of 
+    finbeat_calc(), and plots each individual finbeat in (period, 
+    amplitude, maximum acceleration) space. The finbeat_data argument 
+    specifies whether the finbeats to be plotted come from peak-to-peak 
+    or trough-to-trough calculations. The maximum acceleration is the 
+    maximum acceleration between the finbeat start and finbeat end 
+    times. The number of total finbeats is printed at the end. 
+    
     Args:
         subset_name (string): some string identifying what's in your
-                                subset, to be used as plot title
+                                subset, to be used as the plot title
         finbeats_subset (list): a list of strings with the trial
                             names of the desired trials from finbeats.
                              Note: The list (even of a single
                              element) must be contained in square
-                             brackets.
-                             Also note: You'll probably want to use
-                             one of the subset generating functions,
+                             brackets. You'll probably want to use
+                             the subset generating function: 
                              make_subset()
-        finbeat_info (dict): use either finbeat_byP to do analysis
+        finbeat_data (dict): use either finbeat_byP to do analysis
                             on finbeats as defined by peaks first,
                             or finbeat_byT to use finbeats defined by
-                            troughs first.
-        tracklist (dict)
+                            troughs first. These must be created
+                            beforehand by the function finbeat_calc()
+        tracklist (dict): the compiled position, velocity,
+                          and acceleration data for all trials
+                           produced by extract_data()
 
     Returns:
-        finbeats[trial_name] (dict):
+        Nothing
     """
     count_n = 0  # start counting finbeats
     fig = plt.figure()
@@ -40,22 +51,22 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_info,
     # for each trial of interest
     for trial in finbeats_subset:
         # for each finbeat within that trial
-        for finbeat in finbeat_info[trial].index.values:
+        for finbeat in finbeat_data[trial].index.values:
             # get the period
-            # period_mask = finbeat_info[trial]['period'].loc[finbeat]
-            period = finbeat_info[trial]['period'][finbeat]
+            # period_mask = finbeat_data[trial]['period'].loc[finbeat]
+            period = finbeat_data[trial]['period'][finbeat]
 
             # get the amplitude
-            # amplitude_mask = finbeat_info[trial]['amplitude'].loc[
+            # amplitude_mask = finbeat_data[trial]['amplitude'].loc[
             # finbeat]
-            amplitude = finbeat_info[trial]['amplitude'][finbeat]
+            amplitude = finbeat_data[trial]['amplitude'][finbeat]
 
             # get the start time
-            # start_mask = finbeat_info[trial]['time'].loc[finbeat]
-            start = finbeat_info[trial]['time'][finbeat]
+            # start_mask = finbeat_data[trial]['time'].loc[finbeat]
+            start = finbeat_data[trial]['time'][finbeat]
             # get the end time
-            # end_mask = finbeat_info[trial]['endtime'].loc[finbeat]
-            end = finbeat_info[trial]['endtime'][finbeat]
+            # end_mask = finbeat_data[trial]['endtime'].loc[finbeat]
+            end = finbeat_data[trial]['endtime'][finbeat]
 
             # find the maximum acceleration in that time range
             accel = tracklist[trial]['data'][
