@@ -99,14 +99,21 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
                         'pt1_net_a'][start:end].max()
             z_vals.append(accel)
 
-            # pull the initial speed
+            # pull the initial speed and behavior
             init_spd = tracklist[trial]['start_spd']
+            behavior_type = tracklist[trial]['behavior']
+            if behavior_type == 'B':
+                behavior = '*'
+            elif behavior_type == 'A':
+                behavior = '+'
+            else:
+                behavior = 'o'
 
             # add the point
             p=ax1.scatter3D(xs=period,
                           ys=amplitude,
                           zs=accel,
-                          zdir='z', s=20, marker='o', c=init_spd,
+                          zdir='z', s=50, marker='o', c=init_spd,
                           cmap = cm, edgecolor='none', vmin=0,
                           vmax=max_spd)
             count_n += 1
