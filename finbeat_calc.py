@@ -24,7 +24,7 @@ def finbeat_calc(tracklist_subset, tracklist):
     prepares the position data for peak finding by fitting and
     removing a linear baseline for each trial, and produces indices
     and values for the peaks and troughs. It returns 3 dictionaries,
-    cone containing the timing, magnitude, and type of the local extrema
+    one containing the timing, magnitude, and type of the local extrema
     for each trial; one containing finbeat start and end times,
     periods, and amplitudes as measured from the peak; and anther
     doing the same, but measuring from the troughs.
