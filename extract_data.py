@@ -48,6 +48,13 @@ def extract_data():
                                              entries as defined inline
 
     """
+    # Useful snippet to pull species from Fish later
+    def letters(input):
+        valids = ""
+        for character in input:
+            if character.isalpha():
+                valids += character
+        return valids
 
     trial_info = pd.read_csv(
         r'C:\Users\Kara\PycharmProjects\FishTrackProcessing\Data\Trial_info.csv',
@@ -73,6 +80,7 @@ def extract_data():
             filepath = folder + '/' + filename
             file_info = filename.split("_")
             fish = file_info[0]
+            species = letters(fish)
             sequence = file_info[1]
             trial_name = fish + sequence
             framerate = trial_info['FPS'][trial_name]
@@ -185,6 +193,7 @@ def extract_data():
             tracklist[trial_name] = {'sequence': trial_name,
                                      'fish': fish,
                                      'fish_TL': fish_TL,
+                                     'species': species,
                                      'FPS': framerate,
                                      'behavior': behavior,
                                      'data': df}
