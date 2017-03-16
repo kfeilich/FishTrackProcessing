@@ -1,6 +1,7 @@
 Documentation:
 TODO: Write documentation for plot_track
 TODO: Write documentation for plot_accel
+TODO: Write documentation for check_plots
 
 
 For analysis eventually -- should  go in process_points:

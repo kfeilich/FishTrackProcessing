@@ -10,7 +10,7 @@ matplotlib.rc('axes.formatter', useoffset=False)
 
 def plot_accel(tracklist_subset, tracklist):
     """Plot _____ from data as produced
-            by process_points_pandas.py.
+            by process_points.py.
 
            """
 
