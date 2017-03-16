@@ -23,9 +23,11 @@ def finbeat_calc(tracklist_subset, tracklist):
     position data. Using the module peakutils, this function
     prepares the position data for peak finding by fitting and
     removing a linear baseline for each trial, and produces indices
-    and values for the peaks and troughs. It returns a dictionary
-    containing the timing, magnitude, and type of the local extrema
-    for each trial.
+    and values for the peaks and troughs. It returns 3 dictionaries,
+    cone containing the timing, magnitude, and type of the local extrema
+    for each trial; one containing finbeat start and end times,
+    periods, and amplitudes as measured from the peak; and anther
+    doing the same, but measuring from the troughs.
 
     Args:
         tracklist_subset (list): a list of strings with the trial
@@ -55,6 +57,14 @@ def finbeat_calc(tracklist_subset, tracklist):
                     ['fb_data']['type'] (str): denotes phase of finbeat.
                                                 'P' = peak
                                                 'T' = trough
+        finbeat_byP[trial_name] (dict): each key referring to its own
+        dictionary with the following entries for fb defined by PEAKS
+        only, in addition to those pulled from the finbeats dict:
+            finbeat_byP[trial_name]['endtime'] (float): end of cycle
+            finbeat_byP[trial_name]['period'] (float): length of finbeat
+            finbeat_byP[trial_name]['amplitude'] (float): peak-to-trough
+        finbeat_byT[trial_name] (dict): same as for finbeat_byP,
+        except entries for fb defined by TROUGHS only
     """
 
     finbeats = {}
@@ -112,24 +122,32 @@ def finbeat_calc(tracklist_subset, tracklist):
                                'behavior': behavior, 'fish': fish,
                                'fb_data': fbs}
 
+    # Calculate parameters for each finbeat from peaks and from troughs
     finbeat_byP = {}
     finbeat_byT = {}
-    # CALCULATE PARAMETERS by PEAK and by TROUGH
+
+    # Iterate for each trial
     for trial in tracklist_subset:
         # Pull trial finbeat data
         trial_name = tracklist[trial]['sequence']
         fb_data = finbeats[trial]['fb_data']
+
+        # Initialize new dataframes for the finbeat-specific measures
         fb_peak_params = pd.DataFrame()
         fb_trough_params = pd.DataFrame()
 
+        # Calculate parameters w/ peaks as starting point
         peaksmask = fb_data.loc[:, 'type'] == 'P'
         fb_peak_params = fb_data.loc[peaksmask]
+        #TODO: Replace these with appropriate .loc operators
         fb_peak_params['endtime'] = np.nan
         fb_peak_params['period'] = np.nan
         fb_peak_params['nxttrough'] = np.nan
         fb_peak_params['amplitude'] = np.nan
 
+        # Iterate for each peak in trial
         for i in fb_peak_params.index.values:
+            # If there is a subsequent peak, use it for endtime, period
             if i + 2 in fb_peak_params.index.values:
                 fb_peak_params.loc[i, 'endtime'] = fb_peak_params.loc[
                     i + 2, 'time']
@@ -141,6 +159,7 @@ def finbeat_calc(tracklist_subset, tracklist):
                 fb_peak_params.loc[i, 'endtime'] = np.nan
                 fb_peak_params.loc[i, 'period'] = np.nan
 
+            # If there is a subsequent trough, use it to get amplitude
             if i + 1 in fb_data.index.values:
                 fb_peak_params.loc[i, 'nxttrough'] = fb_data.loc[
                     i + 1, 'ypos']
@@ -151,8 +170,10 @@ def finbeat_calc(tracklist_subset, tracklist):
                 fb_peak_params.loc[i, 'nxttrough'] = np.nan
                 fb_peak_params.loc[i, 'amplitude'] = np.nan
 
+        # Store the results of the iterations
         finbeat_byP[trial_name] = fb_peak_params
 
+        # Iterate for each trough in trial
         troughsmask = fb_data.loc[:, 'type'] == 'T'
         fb_trough_params = fb_data.loc[troughsmask]
         fb_trough_params['endtime'] = np.nan
@@ -160,6 +181,7 @@ def finbeat_calc(tracklist_subset, tracklist):
         fb_trough_params['nxtpeak'] = np.nan
         fb_trough_params['amplitude'] = np.nan
 
+        # If there is a subsequent trough, use it for endtime, period
         for i in fb_trough_params.index.values:
             if i + 2 in fb_trough_params.index.values:
                 fb_trough_params.loc[i, 'endtime'] = \
@@ -171,6 +193,7 @@ def finbeat_calc(tracklist_subset, tracklist):
                 fb_trough_params.loc[i, 'endtime'] = np.nan
                 fb_trough_params.loc[i, 'period'] = np.nan
 
+            # If there is a subsequent peak, use it to get amplitude
             if i + 1 in fb_data.index.values:
                 fb_trough_params.loc[i, 'nxtpeak'] = fb_data.loc[
                     i + 1, 'ypos']
@@ -181,6 +204,7 @@ def finbeat_calc(tracklist_subset, tracklist):
                 fb_trough_params.loc[i, 'nxtpeak'] = np.nan
                 fb_trough_params.loc[i, 'amplitude'] = np.nan
 
+        # Store the results of the iterations
         finbeat_byT[trial_name] = fb_trough_params
 
     return finbeats, finbeat_byP, finbeat_byT
