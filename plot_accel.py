@@ -12,27 +12,8 @@ def plot_accel(tracklist_subset, tracklist):
     """Plot _____ from data as produced
             by process_points_pandas.py.
 
-           Parameters
-           ----------
-           tracklist_subset : 1D array_like
-               List of strings indicating sequence names of desired trials.
-           tracklist : pandas dataframe
-               tracklist dataframe produced by process_points_pandas.py
-
-           Returns
-           -------
-
-           Notes
-           -----
-
-
-           References
-           ----------
-
-           Examples
-           --------
            """
-    #tracklist_subset = input("Input Desired Trial Subset as List")
+
     for trial in tracklist_subset:  # Iterates over all available trials
 
         # Scale time for colormap

@@ -13,27 +13,15 @@ def plot_track(tracklist_subset, tracklist):
     # TODO
     """Plot the 3D position, streamwise velocity, and streamwise accel of the
         snout and the tail tip from data as produced
-        by process_points_pandas.py.
+        by process_points.py.
 
-       Parameters
-       ----------
+    Args:
        tracklist_subset : 1D array_like
            List of strings indicating sequence names of desired trials.         
        tracklist : pandas dataframe
            tracklist dataframe produced by process_points_pandas.py
 
-       Returns
-       -------
-
-       Notes
-       -----
-
-
-       References
-       ----------
-
-       Examples
-       --------
+    Returns:
        """
 
     for trial in tracklist_subset:  # Iterates over all available trials
