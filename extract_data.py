@@ -73,6 +73,9 @@ def extract_data():
     tracklist = {}
     count = 0  # Initialize the count
 
+    def my_round(x):
+        return round(x * 4) / 4
+
     for filename in os.listdir(
             folder):  # For all files in the directory
         if filename.endswith("xypts.csv"):  # that end with 'xypts.csv'
@@ -88,6 +91,8 @@ def extract_data():
             L_calib = trial_info['ScaleL_cm/px'][trial_name]
             V_calib = trial_info['ScaleV_cm/px'][trial_name]
             init_Speed = trial_info['InitialSpd_cm'][trial_name]
+            init_Speed_L = my_round(trial_info['InitialSpd_BLs'][
+                                        trial_name])
             fish_TL = trial_info['Fish_TL_cm'][trial_name]
             behavior = trial_info['Behavior'][trial_name]
 
@@ -195,6 +200,7 @@ def extract_data():
                                      'fish': fish,
                                      'fish_TL': fish_TL,
                                      'start_spd': init_Speed,
+                                     'start_spd_BLs': init_Speed_L,
                                      'species': species,
                                      'FPS': framerate,
                                      'behavior': behavior,
