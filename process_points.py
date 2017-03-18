@@ -19,7 +19,8 @@ finbeats, finbeat_byP, finbeat_byT = finbeat_calc(tracklist.keys(),
 # plot_track(['sometrial'], tracklist)
 # plot_accel(['sometrial'], tracklist)
 # check_plots(['sometrial'], tracklist)
-# plot_analysis('subset_name'),['sometrial'], finbeat_data, tracklist)
+# plot_analysis('subset_name'),['sometrial'], finbeat_data,
+# tracklist)
 
 # """If you want to plot the peaks and troughs on the position data,
 # uncomment section in finbeat_calc"""
