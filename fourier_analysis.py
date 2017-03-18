@@ -39,7 +39,7 @@ def fourier_analysis(tracklist_subset, tracklist):
         tailbeat_freqs = np.fft.fft(tailtip - base)
         frequency_domain = np.fft.fftfreq(len(time), 1 / framerate)
 
-        plt.figure()
+        fig = plt.figure()
         plt.suptitle(trial)
         plt.plot(np.abs(frequency_domain[1:25]),
                  np.abs(tailbeat_freqs[1:25]))

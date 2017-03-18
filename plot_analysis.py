@@ -69,16 +69,16 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
 
     # Set up the figure and choose an appropriate z-axis label
     fig = plt.figure()
-    fig.set_figheight(10)
-    fig.set_figwidth(13)
-    fig.suptitle(subset_name)
+    fig.set_figheight(5)
+    fig.set_figwidth(8)
+    fig.suptitle(subset_name, position=(0.5,0.9))
     ax1 = fig.add_subplot(1, 1, 1, projection='3d')
     ax1.set_xlabel('Period (s)')
     ax1.set_ylabel('Amplitude (cm)')
     if zaxis == 'V':
-        ax1.set_zlabel('Maximum Inst. Velocity(cm/s)')
+        ax1.set_zlabel('\nMaximum Inst. Velocity(cm/s)')
     else:
-        ax1.set_zlabel('Maximum Accel (cm/s2)')
+        ax1.set_zlabel('\nMaximum Accel (cm/s2)')
     ax1.set_xlim3d(0, x_max)
     ax1.set_ylim3d(0, y_max)
 
@@ -139,14 +139,15 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
                 p = ax1.scatter3D(xs=period,
                                   ys=amplitude,
                                   zs=zcolumn,
-                                  zdir='z', s=50, marker=behavior, c=init_spd,
+                                  zdir='z', s=20, marker=behavior,
+                                  c=init_spd,
                                   cmap=cm, edgecolor='none', vmin=0,
                                   vmax=max_spd)
                 count_n += 1
 
     ax1.set_zlim3d(0, z_max)
-    cbar = plt.colorbar(p)
-    cbar.set_label('Initial Speed (cm/s)', rotation=270)
+    cbar = plt.colorbar(p,shrink=0.7, pad = 0.1)
+    cbar.set_label('Initial Speed (cm/s)', rotation=270, labelpad=10)
     if save == True:
         plt.savefig(str(subset_name)+".svg", format="svg")
     else:
