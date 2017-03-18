@@ -18,7 +18,7 @@ finbeats, finbeat_byP, finbeat_byT = finbeat_calc(tracklist.keys(),
 #Pickle the data
 store_data('data')
 
-
+tracklist, finbeats, finbeat_byP, finbeat_byT = read_data('data.pickle')
 # Plot things if desired
 # make_subset(group_by, identifier, tracklist)
 # plot_track(['sometrial'], tracklist)

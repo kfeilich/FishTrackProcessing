@@ -5,7 +5,8 @@ import pandas as pd
 
 
 def plot_analysis(subset_name, finbeats_subset, finbeat_data,
-                      tracklist, zaxis='A', lines=True, cutoff=False):
+                    tracklist, zaxis='A', lines=True, cutoff=False,
+                    save=False):
     """Plots finbeats in (period, amplitude, acceleration) space.
 
     This function takes finbeat data from a specified output of
@@ -38,6 +39,7 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
                            produced by extract_data()
         lines (Bool): if True, adds lines up from x-y plane to z_value
         cutoff (Bool): if True, cuts off z axis at hard-coded maximum value
+        save (Bool): if True, saves to svg instead of printing to screen
 
     Returns:
         Nothing
@@ -145,5 +147,8 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
     ax1.set_zlim3d(0, z_max)
     cbar = plt.colorbar(p)
     cbar.set_label('Initial Speed (cm/s)', rotation=270)
-    plt.show()
+    if save == True:
+        plt.savefig(str(subset_name)+".svg", format="svg")
+    else:
+        plt.show()
     print(count_n)
