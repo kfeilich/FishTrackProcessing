@@ -43,5 +43,6 @@ def fourier_analysis(tracklist_subset, tracklist):
         plt.suptitle(trial)
         plt.plot(np.abs(frequency_domain),
                  np.abs(tailbeat_freqs))
+        plt.xlim(0,12)
         plt.figure()
 

@@ -15,9 +15,10 @@ tracklist = extract_data()
 finbeats, finbeat_byP, finbeat_byT = finbeat_calc(tracklist.keys(),
                                              tracklist)
 
-#Pickle the data
+# Save out the data for later
 store_data('data')
 
+# Read stored data
 tracklist, finbeats, finbeat_byP, finbeat_byT = read_data('data.pickle')
 # Plot things if desired
 # make_subset(group_by, identifier, tracklist)

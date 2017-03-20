@@ -19,7 +19,7 @@ def plot_track(tracklist_subset, tracklist):
        tracklist_subset : 1D array_like
            List of strings indicating sequence names of desired trials.         
        tracklist : pandas dataframe
-           tracklist dataframe produced by process_points_pandas.py
+           tracklist dataframe produced by process_points.py
 
     Returns:
        """
