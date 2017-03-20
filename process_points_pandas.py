@@ -44,11 +44,12 @@ for filename in os.listdir(folder):  # For all files in the directory
         fish = file_info[0]
         sequence = file_info[1]
         trial_name = fish+sequence
-        framerate = trial_info['FPS'][trial_name]
+        framerate = float(trial_info['FPS'][trial_name])
         L_calib = trial_info['ScaleL_cm/px'][trial_name]
         V_calib = trial_info['ScaleV_cm/px'][trial_name]
         init_Speed = trial_info['InitialSpd_cm'][trial_name]
         fish_TL = trial_info['Fish_TL_cm'][trial_name]
+        behavior = trial_info['Behavior'][trial_name]
 
         df = pd.read_csv(filepath, sep=',')
         df = df.rename(columns={'pt1_cam1_Y': 'pt1z', 'pt1_cam2_X': 'pt1x',
@@ -92,9 +93,17 @@ for filename in os.listdir(folder):  # For all files in the directory
             'pt1y_smth': 'pt1y_v', 'pt2z_smth': 'pt2z_v',
             'pt2x_smth': 'pt2x_v', 'pt2y_smth': 'pt2y_v'})
 
+        # Making forward, up positive
+        df2['pt1x_v'] = -df2['pt1x_v']
+        df2['pt1y_v'] = -df2['pt1y_v']
+        df2['pt1z_v'] = -df2['pt1z_v']
+        df2['pt2x_v'] = -df2['pt2x_v']
+        df2['pt2y_v'] = -df2['pt2y_v']
+        df2['pt2z_v'] = -df2['pt2z_v']
+
         # Add initial x-velocity
-        df2['pt1x_v'] = df2['pt1x_v'].sub(init_Speed)  # Because - is forward
-        df2['pt2x_v'] = df2['pt2x_v'].sub(init_Speed)  # Because - is forward
+        df2['pt1x_v'] = df2['pt1x_v'].add(init_Speed)
+        df2['pt2x_v'] = df2['pt2x_v'].add(init_Speed)
 
         # Smooth velocity data using savitzky golay
         df2['pt1x_v_smth'] = scipy.signal.savgol_filter(
@@ -126,8 +135,9 @@ for filename in os.listdir(folder):  # For all files in the directory
         
         # Put all of these into the appropriate object in tracklist
         tracklist[trial_name] = {'sequence': trial_name, 'fish': fish,
-                                 'fish_TL': fish_TL, 'data': df}
-        
+                                 'fish_TL': fish_TL, 'FPS': framerate,
+                                 'behavior': behavior,
+                                 'data': df}
         # Advance the count
         count = count + 1
 
@@ -248,12 +258,14 @@ for filename in os.listdir(folder):  # For all files in the directory
     plt.colorbar(m, shrink=0.5, aspect=10)
     plt.show()
 '''
+# Can use plot_track and plot_accel for same functionality
 
 ########################################################################
 # Define peak detection function
 ########################################################################
-# Detect peaks in data based on  amplitude + other features. by Marcos Duarte
-__author__ = "Marcos Duarte, https://github.com/demotu/BMC"
+# Detect peaks in data based on  amplitude + other features.
+# by Marcos Duarte
+'''__author__ = "Marcos Duarte, https://github.com/demotu/BMC"
 __version__ = "1.0.4"
 __license__ = "MIT"
 
@@ -393,12 +405,12 @@ def _plot(x, mph, mpd, threshold, edge, valley, ax, ind):
         ax.set_title("%s (mph=%s, mpd=%d, threshold=%s, edge='%s')"
                      % (mode, str(mph), mpd, str(threshold), edge))
         # plt.grid()
-        plt.show()
+        plt.show()'''
 
 ########################################################################
 # Define baseline detection function
 ########################################################################
-# Detect baseline trend in cyclical data
+'''# Detect baseline trend in cyclical data
 __author__ = "Kara Feilich"
 __version__ = "1.0.0"
 
@@ -421,13 +433,14 @@ def find_baseline(x,y):
     fitslope, intercept, r_value, p_value, std_err = scipy.stats.linregress(
         x, y)
     baseline = np.array(fitslope * x + intercept)
-    return baseline
+    return baseline'''
 
 ########################################################################
 # Finding Tail Beat Frequency and Amplitude
 ########################################################################
 tail_amplitudes = {}
 tail_periods = {}
+'''
 for trial in tracklist:  # Iterates over all avalable trials
     trial_name = tracklist[trial]['sequence']
     fish = tracklist[trial]['fish']
@@ -485,7 +498,7 @@ for trial in tracklist:  # Iterates over all avalable trials
                                    'fin_excursion': fb_amp}
     tail_periods[trial_name] = {'sequence': trial_name, 'fish': fish,
                                 'fin_periods': fb_period}
-    '''
+
     # plot finbeat parameters against acceleration
     fig = plt.figure()
     fig.suptitle(tracklist[trial]['sequence'])
@@ -543,7 +556,7 @@ for trial in tracklist:  # Iterates over all avalable trials
 ########################################################################
 # Calculating finbeat effort
 ########################################################################
-finbeat_params = {}
+'''finbeat_params = {}
 for trial in tracklist:  # Iterates over all avalable trials
     trial_name = tracklist[trial]['sequence']
     fish = tracklist[trial]['fish']
@@ -561,7 +574,7 @@ for trial in tracklist:  # Iterates over all avalable trials
                                   'finbeat_periods': fb_periods,
                                   'finbeat_effort': fb_effort}
 
-    '''fig = plt.figure()
+    fig = plt.figure()
     fig.suptitle(tracklist[trial]['sequence'])
     ax1 = fig.add_subplot(2, 1, 1)
     ax1.plot(fb_peaktimes, fb_effort, 'bo')

@@ -1,0 +1,8 @@
+font.family : serif
+font.serif : Times New Roman
+axes.titlesize : 14
+axes.labelsize : 10
+lines.linewidth : 3
+lines.markersize : 10
+xtick.labelsize : 10
+ytick.labelsize : 10
