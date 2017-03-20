@@ -8,6 +8,7 @@ from plot_track import plot_track
 from check_plots import check_plots
 from plot_analysis import plot_analysis
 from sin_corr import sin_corr
+from plot_fit_sine import plot_fit_sine
 
 # Take position data from hardcoded folder, calc. velocities, accels
 tracklist = extract_data()
@@ -32,6 +33,7 @@ sine_estimates = sin_corr(tracklist.keys, tracklist, finbeat_byP)
 # check_plots(['sometrial'], tracklist)
 # plot_analysis('subset_name'),['sometrial'], finbeat_data,
 # tracklist)
+# plot_fit_sine(['sometrial'], tracklist, sine_estimates)
 
 # """If you want to plot the peaks and troughs on the position data,
 # uncomment section in finbeat_calc"""
