@@ -35,11 +35,11 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
         # Pull data for each trial
         trialname = tracklist[trial]['sequence']
         behavior = tracklist[trial]['behavior']
-        data = tracklist[trial]['data']['pt2y_smth']
+        data = tracklist[trial]['data']['pt2y']
         base = peakutils.baseline(data, 3)  # Find bkgrd trend
         data = data - base  # remove background trend
         time = tracklist[trial]['data'].index.values
-        periods = np.array(finbeat_df[trial]['period'])i
+        periods = np.array(finbeat_df[trial]['period'])
 
         # Get first estimates for optimization from data
         # Estimate frequency
