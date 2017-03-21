@@ -4,6 +4,13 @@
 
 plt.style.use('mystyle.mplstyle')
 
+speeds_cb = [0]*len(tracklist.keys())
+count_cb= 0
+for i in tracklist.keys():
+    speeds_cb[count] = tracklist[i]['start_spd']
+    count+=1
+speed_cb = max(speeds_cb)
+
 fig2 = plt.figure(figsize = (12,15))
 
 ax2_1 = plot_analysis_forfig(3,2,1, bass_subset, finbeat_byP, tracklist, 'A', True, False)  # Bass acc no cutoff
@@ -25,7 +32,7 @@ fig2.subplots_adjust(right=0.9)
 cbar_ax = fig2.add_axes([0.93, 0.2, 0.03, 0.6])  # [left, bottom, width, height]
 cbar_ax.set_xmargin(0.2)
 cmap = matplotlib.cm.plasma
-norm = matplotlib.colors.Normalize(vmin=0, vmax=53)
+norm = matplotlib.colors.Normalize(vmin=0, vmax=speed_cb)
 cb1 = matplotlib.colorbar.ColorbarBase(cbar_ax, cmap=cmap,
                                 norm=norm,
                                 orientation='vertical')

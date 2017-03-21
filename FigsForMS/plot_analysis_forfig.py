@@ -44,6 +44,13 @@ def plot_analysis_forfig(rows, columns, number, finbeats_subset,
     Returns:
         Nothing
     """
+    speeds_cb = [0] * len(tracklist.keys())
+    count_cb = 0
+    for i in tracklist.keys():
+        speeds_cb[count] = tracklist[i]['start_spd']
+        count += 1
+    speed_cb = max(speeds_cb)
+
     count_n = 0  # start counting finbeats
 
     # find max initial speed for coloring by speed
@@ -138,7 +145,7 @@ def plot_analysis_forfig(rows, columns, number, finbeats_subset,
                                   zdir='z', s=50, marker=behavior,
                                   c=init_spd,
                                   cmap=cm, edgecolor='none', vmin=0,
-                                  vmax=53)
+                                  vmax=speed_cb)
                 count_n += 1
 
     ax1.set_zlim3d(0, z_max)
