@@ -17,67 +17,62 @@ number_pts = 100
 per_max = 1.0
 
 # Simulate some data
-y = np.linspace(0.0,150, num=number_pts)
-x_period = np.linspace(start=0.01, stop=per_max, num=number_pts)
-period = (-149.0*x_period) + 150.0
-x_frequency = np.linspace(start = 0.01, stop = 10, num = number_pts)
-x_amplitude = np.linspace(start=0.01, stop=amp_max, num=100)
-amplitude = 150.0/(1.0+10.0**((2.5-x_amplitude)*3.0))  # arbitrary but approx. sigmoid
-amp_by_per = 5./2. - ((np.log(150/(150-149*x_period)))**(1./3.))/((np.log(10))**(1/3))
+speed = np.linspace(0.1,150, num=number_pts)
+period = -0.0066*speed + 0.999934
+amplitude = -0.217147 * np.log((0.00001)*((149/speed)-1))
+effort = np.divide(amplitude,period)
 
-# Set up the figure
+# Set up diagnostic figure
 fig1 = plt.figure(figsize = (24, 5))
+# Subplot1: Speed by Period
 ax1 = fig1.add_subplot(1,4,1)
 ax1.set_xlabel('Caudal Finbeat Period (s)')
 ax1.set_ylabel('Speed (cm/s)')
 ax1.set_xlim(0,1)
 ax1.set_ylim(0,speed_max)
-ax1.plot(x_period, period)
+ax1.plot(period, speed)
 
+# Subplot2: Speed by Amplitude
 ax2 = fig1.add_subplot(1,4,2)
 ax2.set_xlabel('Caudal Finbeat Amplitude (cm)')
 ax2.set_ylabel('Speed (cm/s)')
-#ax2.set_xlim(0,)
+ax2.set_xlim(0,5)
 ax2.set_ylim(0,speed_max)
-ax2.plot(x_amplitude, amplitude)
+ax2.plot(amplitude, speed)
 
-# Subplot 1: Gait Space (x: Caudal Fin "Effort", y: Speed)
+# Subplot 3: Gait Space (x: Caudal Fin "Effort", y: Speed)
 ax3 = fig1.add_subplot(1, 4, 3)
 ax3.set_xlabel('Caudal Finbeat Effort (cm/s)')
 ax3.set_ylabel('Speed (cm/s)')
-#ax1.set_xlim(0,)
+ax3.set_xlim(0,20)
 ax3.set_ylim(0,speed_max)
-ax3.plot(x_period*x_frequency, y)
+ax3.plot(effort, speed)
 
 ax4 = fig1.add_subplot(1,4,4, projection='3d')
 ax4.set_xlabel('Caudal Finbeat Period (s)')
 ax4.set_ylabel('Caudal Finbeat Amplitude (cm)')
 ax4.set_zlabel('Speed (cm/s)')
-ax4.plot(x_period, amp_by_per, period)
+ax4.plot(period, amplitude, speed)
 
-## Subplot 2: Gait Space broken out by period and amplitude
-#ax2 = fig1.add_subplot(1, 2, 2, projection = '3d')
-#ax2.set_xlabel('Period (cm/s)')
-#ax2.set_ylabel('Amplitude (cm/s)')
-#ax2.set_zlabel('Speed (cm/s)')
-#ax2.set_xlim3d(0, per_max)
-#ax2.set_ylim3d(0, amp_max)
-#ax2.set_zlim(0,speed_max)
-#ax2.plot(xs=x_period, ys=x_amplitude, zs=amplitude)
+plt.savefig("Fig1a_PerAmpEffortSpeed.pdf", fmt='pdf', bbox_inches='tight')
 plt.show()
 
-fig1a =  plt.figure(figsize = (12, 5))
+fig1a =  plt.figure(figsize = (9, 4))
 # Subplot 1: Gait Space (x: Caudal Fin "Effort", y: Speed)
 ax5 = fig1a.add_subplot(1, 2, 1)
 ax5.set_xlabel('Caudal Finbeat Effort (cm/s)')
 ax5.set_ylabel('Speed (cm/s)')
-#ax5.set_xlim(0,)
+ax5.set_xlim(0,20)
 ax5.set_ylim(0,speed_max)
-ax5.plot(x_period*x_frequency, y)
+ax5.plot(effort,speed)
 
 ax6 = fig1a.add_subplot(1,2,2, projection='3d')
 ax6.set_xlabel('Caudal Finbeat Period (s)')
 ax6.set_ylabel('Caudal Finbeat Amplitude (cm)')
 ax6.set_zlabel('Speed (cm/s)')
-ax6.plot(x_period, amp_by_per, period)
+ax6.set_xlim(0,1)
+ax6.set_ylim(0,5)
+ax6.plot(period, amplitude, speed)
+plt.tight_layout()
+plt.savefig("Fig1_EffortSpeed.pdf", fmt='pdf', bbox_inches='tight')
 plt.show()
