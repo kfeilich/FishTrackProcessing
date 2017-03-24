@@ -81,7 +81,7 @@ Ha, ha, ha. You're joking right? This is my first large coding project.
 
 ## Contributors
 
-99% Kara Feilich, 1% Ryan Feather
+99% Kara Feilich (@kfeilich), 1% Ryan Feather (@ryanfeather)
 
 ## License
 
