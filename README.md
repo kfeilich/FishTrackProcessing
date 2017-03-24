@@ -56,6 +56,7 @@ This is written for Python 3, and has the following dependencies:
 * numpy
 * scipy
 * tkinter
+* pickle
 * pandas
 
 
@@ -71,8 +72,8 @@ email me if you have difficulty.
 
 Documentation is ongoing, but most of the essential plotting and data
 wrangling functions are well documented and commented within the
-scripts. When in doubt, run the script in process_points.py -- that's
-the master scaffold for use of all the other functions.
+scripts. **When in doubt, run the script in process_points.py -- that's
+the master scaffold for use of all the other functions.**
 
 ## Tests
 
