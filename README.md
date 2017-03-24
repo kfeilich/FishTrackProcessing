@@ -47,13 +47,13 @@ heterogeneity in kinematics.
 This is written for Python 3, and has the following dependencies:
 
 
-*matplotlib
-*peakutils: https://bitbucket.org/lucashnegri/peakutils
-*pywt (PyWavelets): https://pywavelets.readthedocs.io/en/latest/
-*numpy
-*scipy
-*tkinter
-*pandas
+* matplotlib
+* peakutils: https://bitbucket.org/lucashnegri/peakutils
+* pywt (PyWavelets): https://pywavelets.readthedocs.io/en/latest/
+* numpy
+* scipy
+* tkinter
+* pandas
 Most of these are included in the Anaconda distribution of Python,
 which I recommend. For those that aren't, see the links for
 installation instructions.
