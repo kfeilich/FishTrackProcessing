@@ -54,6 +54,8 @@ This is written for Python 3, and has the following dependencies:
 * scipy
 * tkinter
 * pandas
+
+
 Most of these are included in the Anaconda distribution of Python,
 which I recommend. For those that aren't, see the links for
 installation instructions.
