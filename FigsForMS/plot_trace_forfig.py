@@ -1,8 +1,3 @@
-import peakutils
-import numpy as np
-import matplotlib.pyplot as plt
-
-
 def plot_trace_forfig(rows, columns, number, trial, tracklist):
     """Plots finbeats in (period, amplitude, acceleration) space.
 
@@ -44,7 +39,20 @@ def plot_trace_forfig(rows, columns, number, trial, tracklist):
 
     raw_data = tracklist[trial]['data']['pt2y']
     behavior = tracklist[trial]['behavior']
+    fish = tracklist[trial]['fish']
     init_speed = tracklist[trial]['start_spd_BLs']
     base = peakutils.baseline(raw_data, 3)  # Find bkgrd trend
-    raw_data = raw_data-base
+    raw_data = raw_data - base
     time = raw_data.index.values
+
+    if fish == 'Bass1':
+        col = 'darkblue'
+    else:
+        col = 'darkred'
+
+    ax = fig3.add_subplot(rows, columns, number)
+    ax.set_xlabel('Time (s)')
+    ax.set_ylabel('Tail Tip Position (cm)')
+    ax.plot(time, raw_data, col)
+
+    return ax
