@@ -9,7 +9,10 @@ that you have digitized position data using DLT (Hedrick, 2008) saved in
 flat format in a specific directory with a specified file naming
 convention, with two points tracked from a lateral view video and a
 ventral view video, with pt 1 being the tip of the snout and pt2
-being the tip of the caudal fin.
+being the tip of the caudal fin. It also assumes that you have a
+trial_info.csv file formatted as the one in my example data. You may
+need to modify the code depending on your species/needs, but I tried
+to make that obvious.
 
 ## Code example
 
