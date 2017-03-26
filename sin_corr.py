@@ -25,7 +25,9 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
 
 """
     # Initialize Dataframe to Contain Trial Sine Wave Estimates and Pearsons R
-    sincorr_df = pd.DataFrame(columns=['Behavior', 'Pearsons', 'Pvalue',
+    sincorr_df = pd.DataFrame(columns=['Behavior', 'InitSpd',
+                                       'Pearsons',
+                                       'Pvalue',
                                        'Est.Freq', 'Est.Amplitude',
                                        'Est.Phase', 'Est.Offset'],
                               index=tracklist_subset)
@@ -35,6 +37,7 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
         # Pull data for each trial
         trialname = tracklist[trial]['sequence']
         behavior = tracklist[trial]['behavior']
+        init_spd = tracklist[trial]['start_spd']
         data = tracklist[trial]['data']['pt2y']
         base = peakutils.baseline(data, 3)  # Find bkgrd trend
         data = data - base  # remove background trend
@@ -81,7 +84,8 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
 
         # Add the estimates and correlation statistics to the output dataframe
         sincorr_df.loc[trialname] = pd.Series(
-            {'Behavior': behavior, 'Pearsons': corr[0], 'Pvalue': corr[1],
+            {'Behavior': behavior, 'InitSpd': init_spd,
+             'Pearsons': corr[0], 'Pvalue': corr[1],
              'Est.Freq': est_frequency, 'Est.Amplitude': est_amplitude,
              'Est.Phase': est_phase, 'Est.Offset': est_offset})
     return sincorr_df
