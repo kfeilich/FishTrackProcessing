@@ -48,7 +48,6 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
         # Estimate frequency
         periods = np.sort(periods)
         periods = periods[np.logical_not(np.isnan(periods))]
-        periods = np.delete(periods, [0, len(periods) - 1])
         period = np.mean(periods)
         guess_frequency = 1. / period
         # Estimate amplitude ( = 1/2 excursion)
@@ -56,7 +55,6 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
         amplitudes = abs(amplitudes)
         amplitudes = np.sort(amplitudes)
         amplitudes = amplitudes[np.logical_not(np.isnan(amplitudes))]
-        amplitudes = np.delete(amplitudes, [0, len(amplitudes) - 1])
         amplitude = np.mean(amplitudes) / 2
         guess_amplitude = amplitude
         #Estimate y-axis and temporal shifts (arbitrary)
