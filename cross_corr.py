@@ -43,6 +43,11 @@ def cross_corr(subset, tracklist):
             tailbeat_FFT = np.abs(np.fft.fft(tailtip))  # Do the FFT using Scipy
             tailbeat_FFT2 = np.abs(np.fft.fft(tailtip2))
 
+            tailbeat_FFT = np.delete(tailbeat_FFT, np.arange(0,100), 0)
+            #print(len(tailbeat_FFT))
+           #print(len(tailbeat_FFT2))
+            tailbeat_FFT2 = np.delete(tailbeat_FFT2, np.arange(0,100),0)
+
             tailbeat_FFT_norm = (tailbeat_FFT - np.mean(tailbeat_FFT)) / (
             np.std(tailbeat_FFT) * len(tailbeat_FFT))
             tailbeat_FFT2_norm = (tailbeat_FFT2 - np.mean(
