@@ -12,39 +12,36 @@ def cross_corr(subset, tracklist):
     for i in subset:
         tailtip = tracklist[i]['data']['pt2y_smth']
         base = peakutils.baseline(tailtip, 3)  # Find linear bkgrd trend
-
-        # Do the FFT using Scipy
-        tailbeat_FFT = np.abs(np.fft.fft(tailtip - base))
+        tailtip = tailtip-base
 
         for j in subset:
             tailtip2 = tracklist[j]['data']['pt2y_smth']
-            base2 = peakutils.baseline(tailtip2,
-                                       3)  # Find linear bkgrd trend
+            base2 = peakutils.baseline(tailtip2, 3)
+            tailtip2 = tailtip2-base2
 
-            # Do the FFT using Scipy
-            tailbeat_FFT2 = np.abs(np.fft.fft(tailtip2 - base2))
-
-            # Pad the FFTs
-            if len(tailbeat_FFT) < len(tailbeat_FFT2):
-                pad_tot = len(tailbeat_FFT2) - len(tailbeat_FFT)
+            # Pad the DATAs
+            if len(tailtip) < len(tailtip2):
+                pad_tot = len(tailtip2) - len(tailtip)
                 if pad_tot % 2 == 0:
                     pad = int(pad_tot / 2.0)
-                    tailbeat_FFT = np.pad(tailbeat_FFT, (pad, pad), 'mean')
+                    tailtip = np.pad(tailtip, (pad, pad), 'mean')
                 else:
                     pad = int(math.ceil(pad_tot / 2.0))
-                    tailbeat_FFT = np.pad(tailbeat_FFT, (pad, pad - 1),
+                    tailtip= np.pad(tailtip, (pad, pad - 1),
                                           'mean')
 
-            elif len(tailbeat_FFT2) < len(tailbeat_FFT):
-                pad_tot = len(tailbeat_FFT) - len(tailbeat_FFT2)
+            elif len(tailtip2) < len(tailtip):
+                pad_tot = len(tailtip) - len(tailtip2)
                 if pad_tot % 2 == 0:
                     pad = int(pad_tot / 2.0)
-                    tailbeat_FFT2 = np.pad(tailbeat_FFT2, (pad, pad),
-                                           'mean')
+                    tailtip2 = np.pad(tailtip2, (pad, pad), 'mean')
                 else:
                     pad = int(math.ceil(pad_tot / 2.0))
-                    tailbeat_FFT2 = np.pad(tailbeat_FFT, (pad,
-                                                        pad - 1), 'mean')
+                    tailtip2 = np.pad(tailtip2, (pad, pad - 1), 'mean')
+
+            # Do the FFT using Scipy
+            tailbeat_FFT = np.abs(np.fft.fft(tailtip))  # Do the FFT using Scipy
+            tailbeat_FFT2 = np.abs(np.fft.fft(tailtip2))
 
             tailbeat_FFT_norm = (tailbeat_FFT - np.mean(tailbeat_FFT)) / (
             np.std(tailbeat_FFT) * len(tailbeat_FFT))

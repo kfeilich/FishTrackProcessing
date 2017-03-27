@@ -7,12 +7,13 @@ def sort_subset(subset, tracklist):
         to_sort['behavior'][i] = tracklist[i]['behavior']
         to_sort['speed'][i] = tracklist[i]['start_spd']
 
-    to_sort['behavior'] = to_sort['behavior'].astype('category')
-    to_sort['behavior'].cat.reorder_categories(['S', 'A', 'B'],
-                                               ordered=True)
+    to_sort['behavior'] = to_sort['behavior'].astype('category',
+                                                     categories = [
+                                                         'S', 'A',
+                                                         'B'],
+                                                     ordered = True)
 
-    to_sort = to_sort.sort_values(by=['behavior', 'speed'],
-                                  ascending=True)
+    to_sort = to_sort.sort_values(by=['behavior', 'speed'])
 
     return list(to_sort.index.values)
 
