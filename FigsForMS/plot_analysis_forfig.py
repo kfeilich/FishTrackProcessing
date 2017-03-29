@@ -47,8 +47,8 @@ def plot_analysis_forfig(rows, columns, number, finbeats_subset,
     speeds_cb = [0] * len(tracklist.keys())
     count_cb = 0
     for i in tracklist.keys():
-        speeds_cb[count] = tracklist[i]['start_spd']
-        count += 1
+        speeds_cb[count_cb] = tracklist[i]['start_spd']
+        count_cb += 1
     speed_cb = max(speeds_cb)
 
     count_n = 0  # start counting finbeats
@@ -79,7 +79,7 @@ def plot_analysis_forfig(rows, columns, number, finbeats_subset,
     ax1.set_xlabel('Period (s)')
     ax1.set_ylabel('Amplitude (cm)')
     if zaxis == 'V':
-        ax1.set_zlabel('\nMax. Inst. Velocity(cm/s)')
+        ax1.set_zlabel('\nMax. Inst. Velocity (cm/s)')
     else:
         ax1.set_zlabel('\nMax. Acceleration (cm/s $^2$)')
     ax1.set_xlim3d(0, x_max)
@@ -124,10 +124,13 @@ def plot_analysis_forfig(rows, columns, number, finbeats_subset,
             behavior_type = tracklist[trial]['behavior']
             if behavior_type == 'B':
                 behavior = '*'
+                size = 60
             elif behavior_type == 'A':
-                behavior = '+'
+                behavior = 'P'
+                size = 50
             else:
                 behavior = 'o'
+                size = 30
 
             # add the point
             if cutoff == True and zaxis == 'A':
@@ -135,26 +138,32 @@ def plot_analysis_forfig(rows, columns, number, finbeats_subset,
             else:
                 z_max = np.nanmax(z_vals)
             if zcolumn <= z_max and lines == True and zcolumn >= 0:
-                p = ax1.plot(xs=[period, period], ys=[amplitude, amplitude],
+                p = ax1.plot(xs=[period, period],
+                             ys=[amplitude, amplitude],
                              zs=[0, zcolumn],
-                             linestyle='solid', c=cm(init_spd / max_spd),
+                             linestyle='solid',
+                             c=cm(init_spd / max_spd),
                              alpha=0.8, linewidth=0.5)
                 p = ax1.scatter3D(xs=period,
                                   ys=amplitude,
                                   zs=zcolumn,
-                                  zdir='z', s=50, marker=behavior,
+                                  zdir='z', s=size, marker=behavior,
                                   c=init_spd,
                                   cmap=cm, edgecolor='none', vmin=0,
                                   vmax=speed_cb)
                 count_n += 1
 
     ax1.set_zlim3d(0, z_max)
-    #cbar = plt.colorbar(p,shrink=0.7, pad = 0.1)
-    #cbar.set_label('Initial Speed (cm/s)', rotation=270, labelpad=10)
-    #if save == True:
-        #plt.savefig(str(subset_name)+".svg", format="svg")
-    #else:
-        #plt.show()
-    #print(count_n)
+    # pane_gray = 0.0
+    # ax1.w_xaxis.set_pane_color((pane_gray,pane_gray,pane_gray,1.0))
+    # ax1.w_yaxis.set_pane_color((pane_gray,pane_gray,pane_gray,1.0))
+    # ax1.w_zaxis.set_pane_color((pane_gray,pane_gray,pane_gray,1.0))
+    # cbar = plt.colorbar(p,shrink=0.7, pad = 0.1)
+    # cbar.set_label('Initial Speed (cm/s)', rotation=270, labelpad=10)
+    # if save == True:
+    # plt.savefig(str(subset_name)+".svg", format="svg")
+    # else:
+    # plt.show()
+    # print(count_n)
 
     return ax1

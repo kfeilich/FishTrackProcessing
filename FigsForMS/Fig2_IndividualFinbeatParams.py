@@ -2,13 +2,16 @@
 #import matplotlib.pyplot as plt
 #from plot_analysis_forfig import plot_analysis_forfig
 
+matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 plt.style.use('mystyle.mplstyle')
+
+
 
 speeds_cb = [0]*len(tracklist.keys())
 count_cb= 0
 for i in tracklist.keys():
-    speeds_cb[count] = tracklist[i]['start_spd']
-    count+=1
+    speeds_cb[count_cb] = tracklist[i]['start_spd']
+    count_cb+=1
 speed_cb = max(speeds_cb)
 
 fig2 = plt.figure(figsize = (12,15))
@@ -31,13 +34,14 @@ plt.tight_layout()
 fig2.subplots_adjust(right=0.9)
 cbar_ax = fig2.add_axes([0.93, 0.2, 0.03, 0.6])  # [left, bottom, width, height]
 cbar_ax.set_xmargin(0.2)
-cmap = matplotlib.cm.plasma
+cmap = matplotlib.cm.cool
 norm = matplotlib.colors.Normalize(vmin=0, vmax=speed_cb)
 cb1 = matplotlib.colorbar.ColorbarBase(cbar_ax, cmap=cmap,
                                 norm=norm,
                                 orientation='vertical')
 cb1.set_label('Initial Speed (cm/s)')
 
-fig2.savefig('Fig2_IndividualFinbeats.pdf', fmt = 'pdf')
-
+#fig2.savefig('Fig2_IndividualFinbeats.pdf', fmt = 'pdf')
+#fig2.savefig('Fig2_IndividualFinbeats.svg', fmt = 'svg')
+plt.show()
 

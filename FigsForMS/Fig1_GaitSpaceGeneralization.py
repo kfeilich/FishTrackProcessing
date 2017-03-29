@@ -4,7 +4,10 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
 # NOTE: This is not real data, just a schematic
+
+matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 plt.style.use('mystyle.mplstyle')
+
 
 # Pull a colormap
 cm = plt.get_cmap("plasma")

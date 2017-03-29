@@ -1,3 +1,4 @@
+matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 plt.style.use('mystyle.mplstyle')
 
 # Fourier transforms with represetative traces
@@ -24,11 +25,17 @@ ax7_3.set_title('Trout Steady Swimming')
 # Trout LinAcc De-trended trace, 2Ls
 ax8_3 = plot_trace_forfig(4, 3, 8, 'BTrout2S01', tracklist)
 ax8_3.set_title('Trout Linear Acceleration')
-#ax9_3 = plot_trace_forfig(4, 3, 9, [], tracklist)  # Trout Burst De-trended trace
+# Trout Burst De-trended trace, 3Ls
+ax9_3 = plot_trace_forfig(4, 3, 9, 'BTrout2S03', tracklist)
+ax9_3.set_title('Trout Burst Acceleration (3 BL/s)')
 # Trout Steady FFT, 2Ls
 ax10_3 = plot_fft_forfig(4, 3, 10, 'BTrout1S03', tracklist)
 # Trout LinAcc FFT, 2Ls
 ax11_3 = plot_fft_forfig(4, 3, 11, 'BTrout2S01', tracklist)
-#ax12_3 = plot_fft_forfig(4, 3, 12, [], tracklist)  # Trout Burst FFT
+ # Trout Burst FFT, 3Ls
+ax12_3 = plot_fft_forfig(4, 3, 12, 'BTrout2S03', tracklist)
+
 plt.tight_layout()
+plt.savefig('Fig3_TailTracesFFTS_2Ls.svg', fmt='svg')
 plt.savefig('Fig3_TailTracesFFTS_2Ls.pdf', fmt='pdf')
+plt.show()
