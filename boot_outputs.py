@@ -1,3 +1,6 @@
+import pandas as pd
+import numpy as np
+
 def boot_outputs(model, boot_list, interact=True, amplitude=True):
     model_params = ['F_test', 'Intercept', 'Period']
     if amplitude == True:
@@ -65,20 +68,21 @@ def boot_outputs(model, boot_list, interact=True, amplitude=True):
     # Confidence Intervals
     Intercept_coefs = sorted(Intercept_coefs)
     d_Intercept_coefs = Intercept_coefs - coef_obs['Intercept']
-    quant_Intercept = np.percentile(a=d_Intercept_coefs, q=[5, 95])
+    quant_Intercept = np.percentile(a=d_Intercept_coefs, q=[2.5, 97.5])
     ci_Intercept = np.subtract(coef_obs['Intercept'], quant_Intercept)
     boot_output['CIs95']['Intercept'] = ci_Intercept
 
     Period_coefs = sorted(Period_coefs)
     d_Period_coefs = Period_coefs - coef_obs['Period']
-    quant_Period = np.percentile(a=d_Period_coefs, q=[5, 95])
+    quant_Period = np.percentile(a=d_Period_coefs, q=[2.5, 97.5])
     ci_Period = np.subtract(coef_obs['Period'], quant_Period)
     boot_output['CIs95']['Period'] = ci_Period
 
     if amplitude == True:
         Amplitude_coefs = sorted(Amplitude_coefs)
         d_Amplitude_coefs = Amplitude_coefs - coef_obs['Amplitude']
-        quant_Amplitude = np.percentile(a=d_Amplitude_coefs, q=[5, 95])
+        quant_Amplitude = np.percentile(a=d_Amplitude_coefs,q=[2.5,
+                                                               97.5])
         ci_Amplitude = np.subtract(coef_obs['Amplitude'],
                                    quant_Amplitude)
         boot_output['CIs95']['Amplitude'] = ci_Amplitude
@@ -86,7 +90,8 @@ def boot_outputs(model, boot_list, interact=True, amplitude=True):
     if interact == True:
         Interact_coefs = sorted(Interact_coefs)
         d_Interact_coefs = Interact_coefs - coef_obs['Period:Amplitude']
-        quant_Interact = np.percentile(a=d_Interact_coefs, q=[5, 95])
+        quant_Interact = np.percentile(a=d_Interact_coefs, q=[2.5,
+                                                              97.5])
         ci_Interact = np.subtract(coef_obs['Period:Amplitude'],
                                   quant_Interact)
         boot_output['CIs95']['Interact'] = ci_Interact
