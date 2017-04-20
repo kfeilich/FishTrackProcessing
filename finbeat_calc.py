@@ -35,7 +35,7 @@ def finbeat_calc(tracklist_subset, tracklist):
                              Note: The list (even of a single
                              element) must be contained in square
                              brackets.
-                             Also note: Alternatively, to iterate
+                             Also: Alternatively, to iterate
                              over all trials, set this to
                              tracklist.keys()
         tracklist (dict): a tracklist produced by extract_data()

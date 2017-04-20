@@ -10,10 +10,12 @@ matplotlib.rc('axes.formatter', useoffset=False)
 
 
 def plot_track(tracklist_subset, tracklist):
-    # TODO
-    """Plot the 3D position, streamwise velocity, and streamwise accel of the
-        snout and the tail tip from data as produced
-        by process_points.py.
+    """Plot the 3D position, streamwise velocity, and streamwise accel
+    
+     Plot the 3D position, streamwise velocity, and streamwise accel
+     of the snout and the tail tip from data output from 
+     extract_data(). Produces a multipanel plot with position in 3D 
+     for pts 1 and 2, and derived values in 2D (against time). 
 
     Args:
        tracklist_subset : 1D array_like
@@ -22,6 +24,7 @@ def plot_track(tracklist_subset, tracklist):
            tracklist dataframe produced by process_points.py
 
     Returns:
+        None
        """
 
     for trial in tracklist_subset:  # Iterates over all available trials

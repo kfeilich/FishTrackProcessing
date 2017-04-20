@@ -7,6 +7,25 @@ import matplotlib.pyplot as plt
 
 
 def plot_fit_sine(tracklist_subset, tracklist, sin_corr_df):
+    """Plots detrended tail tip motion against best fit sine wave
+
+       Does what it says above, using the data from tracklist and 
+       sin_corr_df, including an annotation with the Pearson's 
+       correlation coefficient between the two traces.
+
+               Args:
+                   tracklist_subset (list): a subset of trials, typically 
+                       generated using the convenience function 
+                       make_subset()
+                   tracklist (dict): a tracklist produced by extract_data()
+                   sin_corr_df (dataframe): a Pandas dataframe 
+                        produced by sin_corr() containing the trials in 
+                        tracklist subset
+                        
+                Returns: None, just a plot
+
+              """
+
     for trial in tracklist_subset:
         raw_data = tracklist[trial]['data']['pt2y']
         behavior = tracklist[trial]['behavior']

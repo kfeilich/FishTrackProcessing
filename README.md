@@ -58,6 +58,7 @@ This is written for Python 3, and has the following dependencies:
 * tkinter
 * pickle
 * pandas
+* statsmodels
 
 
 Most of these are included in the Anaconda distribution of Python,

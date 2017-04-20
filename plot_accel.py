@@ -9,8 +9,15 @@ matplotlib.rc('axes.formatter', useoffset=False)
 
 
 def plot_accel(tracklist_subset, tracklist):
-    """Plot _____ from data as produced
-            by process_points.py.
+    """Plot tail beat motion and snout streamwise acceleration 
+    
+    Does what it says above, using data from tracklist.
+    
+            Args:
+                tracklist_subset (list): a subset of trials, typically 
+                    generated using the convenience function 
+                    make_subset()
+                tracklist (dict): a tracklist produced by extract_data()
 
            """
 

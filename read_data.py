@@ -1,20 +1,20 @@
 import pickle
 
 def read_data(filename):
-    """Stores data in a pickle file for use later
+    """Reads extract_data() and finbeat_calc() data from a pickle file 
+    
 
-           This function takes the items listed (intended for
-           tracklist, finbeats, finbeat_byP, finbeat_byT) and stores
-           them in a pickle file so they can be rapidly opened later
-           without re-building them from raw file inputs. (If
-           extract_data and finbeat_calc are running slowly, pickle
-           their outputs. You only need to run those fns again if
-           you add data.
+           This function pulls tracklist, finbeats, finbeat_byP, 
+           finbeat_byT from a pickle file in which they were stored, 
+           without re-building them from raw file inputs. 
            Args:
                filename (str): pickle filename
 
            Returns:
-                Nothing
+               tracklist (dict):  stored after extract_data()
+               finbeats (dict): stored after finbeat_calc()
+               finbeat_byP (dict): stored after finbeat_calc() 
+               finbeat_byT (dict): stored after finbeat_calc()
     """
     with open(filename, 'rb') as f:
         tracklist, finbeats, finbeat_byP, finbeat_byT = pickle.load(f)

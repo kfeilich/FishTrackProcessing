@@ -7,7 +7,14 @@ from scipy import signal
 
 
 def sin_corr(tracklist_subset, tracklist, finbeat_df):
-    """Computes full width at half maximum from FFT of tailbeat movement
+    """Estimates best fit sine waves and returns estimates
+    
+    This estimates the frequency, amplitude, phase, and offset of a 
+    sine function to best fit detrended tail tip motion from the 
+    trial subset data. It then calculates the Pearson's correlation 
+    coefficients between the detrended data and the sine wave. 
+    Finally, it returns the parameter estimates and the correlation 
+    coefficients as a dataframe.
 
         Args:
             tracklist_subset (list): a list of strings with the trial
@@ -20,7 +27,19 @@ def sin_corr(tracklist_subset, tracklist, finbeat_df):
                                  tracklist.keys()
             tracklist (dict): a tracklist produced by extract_data()
             finbeat_df (dict): a finbeat dataframe produced by finbeat_calc
+        
         Returns:
+            sin_corr_df (DataFrame): A Pandas DataFrame with rows= 
+            trials and columns = 
+                'Behavior' (str): 'S' for steady, 'A' for linear 
+                                accel, 'B' for burst
+                'Init_Spd' (float): initial speed in cm/s
+                'Pearsons' (float): Pearson's correlation coefficient
+                'Pvalue' (float): P-value for the pearson's correlation
+                'Est.Freq' (float): OLS estimate for frequency
+                'Est.Amplitude' (float): OLS estimate for amplitude
+                'Est.Phase' (float): OLS estimate for phase
+                'Est.Offset' (float): OLS estimate for offset. 
 
 
 """

@@ -2,6 +2,17 @@ import pandas as pd
 import numpy as np
 
 def speed_heatmap(subset, tracklist):
+    """Returns the pairwise differences in initial speed between trials 
+    
+    Used this to show relationship between cross-correlations and 
+    speed. 
+    
+        Args: 
+            subset (list):a subset of trials, typically 
+                    generated using the convenience function 
+                    make_subset()
+            tracklist (dict): a tracklist produced by extract_data()
+    """
     speed_diff_mat = pd.DataFrame(data=None, index=subset,
                                   columns=subset)
     for i in subset:

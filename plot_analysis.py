@@ -10,12 +10,13 @@ def plot_analysis(subset_name, finbeats_subset, finbeat_data,
     """Plots finbeats in (period, amplitude, acceleration) space.
 
     This function takes finbeat data from a specified output of
-    finbeat_calc(), and plots each individual finbeat in (period,
-    amplitude, maximum acceleration) space. The finbeat_data argument
-    specifies whether the finbeats to be plotted come from peak-to-peak
-    or trough-to-trough calculations. The maximum acceleration is the
-    maximum acceleration between the finbeat start and finbeat end
-    times. The number of total finbeats is printed at the end.
+    finbeat_calc() and plots each individual finbeat in (period,
+    amplitude, maximum [acceleration or velocity]) space. The 
+    finbeat_data argument specifies whether the finbeats to be 
+    plotted come from peak-to-peak or trough-to-trough calculations. 
+    The maximum acceleration is the maximum acceleration between the 
+    finbeat start and finbeat end times. The number of total 
+    finbeats is printed at the end.
 
     Args:
         subset_name (string): some string identifying what's in your

@@ -8,7 +8,7 @@ matplotlib.rc('axes.formatter', useoffset=False)
 
 
 def fourier_analysis(tracklist_subset, tracklist):
-    """Computes full width at half maximum from FFT of tailbeat movement
+    """Computes FFT of tailbeat movement (do not use)
 
         Args:
             tracklist_subset (list): a list of strings with the trial
@@ -21,6 +21,7 @@ def fourier_analysis(tracklist_subset, tracklist):
                                  tracklist.keys()
             tracklist (dict): a tracklist produced by extract_data()
         Returns:
+            None, just a plot.
 
 
 """

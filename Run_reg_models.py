@@ -1,3 +1,6 @@
+"""Just a script with all of the code I used to run the regression 
+models"""
+
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import pickle

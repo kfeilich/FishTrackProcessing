@@ -57,12 +57,13 @@ def extract_data():
                 valids += character
         return valids
 
+    # YOU MUST SET THIS FOR YOUR OWN DATA
     trial_info = pd.read_csv(
         r'C:\Users\Kara\PycharmProjects\FishTrackProcessing\Data\Trial_info.csv',
         sep=',')
     trial_info = trial_info.set_index('Trial_name')
 
-    # Comment out for user input
+    # YOU MUST SET THIS FOR YOUR OWN DATA
     folder = r'C:\Users\Kara\PycharmProjects\FishTrackProcessing\Data'
 
     #  Uncomment for User Input

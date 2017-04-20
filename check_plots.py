@@ -10,15 +10,21 @@ matplotlib.rc('axes.formatter', useoffset=False)
 
 
 def check_plots(tracklist_subset, tracklist):
-    """Plot _____ from data as produced by process_points.py.
+    """Plot some diagnostics from trial data produced by extract_data()
+    
+    This is just a convenience plotting function to have a look at 
+    the position, velocity, and acceleration data after initial 
+    processing using extract_data. It is useful for sanity checks, 
+    making sure everything looks reasonable. 
 
     Args:
-       tracklist_subset : 1D array_like
+       tracklist_subset (list): 
            List of strings indicating sequence names of desired trials.
-       tracklist : pandas dataframe
-           tracklist dataframe produced by process_points.py
+       tracklist (dict):
+           tracklist produced by extract_data()
 
     Returns
+        None. Just plots.
           """
 
     for trial in tracklist_subset:  # Iterates over all available trials

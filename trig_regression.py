@@ -1,3 +1,5 @@
+# Note: This is the only code in this repository written by Ryan Feather
+
 import numpy as np
 from scipy.optimize import curve_fit
 

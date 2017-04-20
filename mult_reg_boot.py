@@ -4,21 +4,18 @@ import numpy as np
 import pandas as pd
 
 
-def mult_reg_boot(formula, y, df, frac_sub, reps):
+def mult_reg_boot(formula, y, df, reps=2000):
     """Runs bootstrap reps of multiple linear regression to est outputs
 
            Args:
-                formula (str): a list of strings with the trial
-                                   names of the desired trials from tracklist.
-                                    Note: The list (even of a single
-                                    element) must be contained in square
-                                    brackets.
-                                    Also note: Alternatively, to iterate
-                                    over all trials, set this to
-                                    tracklist.keys()
-               y (pd.DataFrame series): response variable
-               df (Pandas DataFrame):
-               size_sub (int): size of subset
+                formula (str): string identifying the formula as 
+                        input to stats models, typically of the form
+                         'Y ~ X1 * X2' , or something like that. 
+                         See the Jupyter notebook for examples. 
+               y (string): string identifying the Pandas Series within 
+                        df that contains the response variable
+               df (Pandas DataFrame): one of the dataframes prepared 
+                        using script finbeat_params_prep.py
                reps (int): number of bootstrap replicates
 
            Returns:

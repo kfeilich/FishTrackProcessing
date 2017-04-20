@@ -7,10 +7,29 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def plot_traj(trial, tracklist, finbeat_subset):
+    """Plots a single trial's finbeats against steady finbeats 
+    
+    Plots a single trial's finbeats against steady finbeats for the 
+    same species at the same initial speed. 
+    
+       Args:
+           trial (string): some string identifying what's in your
+                                   subset, to be used as the plot title
+           finbeat_subset (): 
+           tracklist (dict): the compiled position, velocity,
+                             and acceleration data for all trials
+                              produced by extract_data()
+           
+       Returns:
+           fig (matplotlib figure)
+       """
+
+    # Get info for focal trial
     behavior = tracklist[trial]['behavior']
     species = tracklist[trial]['species']
     speed = tracklist[trial]['start_spd_BLs']
 
+    # Make the corresponding subset of steady trials
     steady_subset = make_subset(group_by1='species',
                                 identifier1=species,
                                 tracklist=tracklist,
@@ -18,6 +37,8 @@ def plot_traj(trial, tracklist, finbeat_subset):
                                 identifier2='S',
                                 group_by3='start_spd_BLs',
                                 identifier3=speed)
+
+    # Get all steady finbeats for steady subset trials
     steady_finbeats = []
     # Make (speed, period, amplitude) tuples
     for i in steady_subset:
@@ -30,6 +51,7 @@ def plot_traj(trial, tracklist, finbeat_subset):
                                     finbeat_subset[i]['period'][j],
                                     finbeat_subset[i]['amplitude'][j]))
 
+    # Generate tuples for the focal trial with finbeat parameters)
     trial_finbeats = []
     count = 0
     for k in finbeat_subset[trial].index.values:
@@ -43,10 +65,12 @@ def plot_traj(trial, tracklist, finbeat_subset):
                                amplitude))
         count += 1
 
+    # Remove nans...
     nans = {np.nan, float('nan')}
     trial_finbeats = [n for n in trial_finbeats if
                       not nans.intersection(n)]
 
+    # Use for dropping altitudes
     allz = []
     for i in steady_finbeats:
         allz.append(i[0])
@@ -81,4 +105,4 @@ def plot_traj(trial, tracklist, finbeat_subset):
                       edgecolor='none')
         ax1.text(x=c, y=d, z=b, s=str(a), color='red', fontsize=16)
 
-        plt.show()
+    return fig

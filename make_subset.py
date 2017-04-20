@@ -9,11 +9,15 @@ def make_subset(group_by1, identifier1, tracklist, group_by2=None,
     factors of interest, that are suitable for use in other
     functions, including finbeat_calc(), plot_track(), plot_accel(),
     check_plots(), and plot_analysis() in particular. Facilitates
-    easy subset creation by species or fish.
+    easy subset creation by species or fish. Possible identifiers are 
+    any of the string, float, or integer associated keys of a 
+    tracklist: ['species', 'fish', 'behavior', 'fish_TL', 
+                'start_spd','start_spd_BLs']
 
     Args:
         group_by1 (str): the factor to search for your identifier of
-                        interest, usually 'fish' or 'species'
+                        interest, usually 'fish' or 'species' or 
+                        'behavior'
         identifier1 (str): the specific identifier you want to index,
                            e.g. 'Bass' or 'BTrout' if group_by =
                           'species'; or 'Bass1' or 'BTrout2' if
@@ -21,10 +25,10 @@ def make_subset(group_by1, identifier1, tracklist, group_by2=None,
         tracklist (dict): the compiled position, velocity,
                           and acceleration data for all trials
                            produced by extract_data()
-        group_by2
-        identifier2
-        group_by3
-        identifier3
+        group_by2 (str): optional, as group_by1
+        identifier2(str): req. if group_by2 is used, as identifier1. 
+        group_by3 (str): optional, as group_by1. Use group_by2 first. 
+        identifier3 (str): req. if group_by3 is used, as identifier1.
 
     Returns:
         subset (list): a list of strings containing the trial names

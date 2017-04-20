@@ -2,6 +2,31 @@ import pandas as pd
 import numpy as np
 
 def boot_outputs(model, boot_list, interact=True, amplitude=True):
+    """Takes bootstrap replicates and returns 95% CIs and pseudo-p-vals 
+
+           This function takes the set of bootstrap replicates 
+           produced by mult_reg_boot, and returns 95% CIs for the 
+           regression coefficients and pseudo-p-values for the 
+           initial base model. 
+
+           Args:
+               model (statsmodels RegressionResults): the initial 
+                    model output using all data points
+               boot_list (list): a list of RegressionResults 
+                    produced by mult_reg_boot().
+               interact (Bool): True if the initial model have an 
+                    interaction effect, False if not. 
+               amplitude (Bool): True if the initial model 
+                    included a coefficient for amplitude, False if not. 
+
+           Returns:
+               boot_output (DataFrame): Columns are 'Pseudo Pvalues' 
+                    and '95% CIs', rows are the parameters being 
+                    estimated.
+
+
+           """
+    # Setting up the output dataframe
     model_params = ['F_test', 'Intercept', 'Period']
     if amplitude == True:
         model_params.append('Amplitude')

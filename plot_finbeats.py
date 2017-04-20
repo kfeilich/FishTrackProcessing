@@ -9,8 +9,20 @@ matplotlib.rc('axes.formatter', useoffset=False)
 
 
 def plot_finbeats(tracklist_subset, tracklist, finbeat_params):
-
-    for trial in tracklist_subset:
+   """Don't use this, it's deprecated
+   
+        Args:
+            tracklist_subset (list): a subset of trials, typically 
+                    generated using the convenience function 
+                    make_subset()
+            tracklist (dict): a tracklist produced by extract_data()
+            finbeat_params (dataframe): use either finbeat_byP to do 
+                    analysis on finbeats as defined by peaks first,
+                    or finbeat_byT to use finbeats defined by
+                    troughs first. These must be created beforehand by
+                    the function finbeat_calc()
+   """
+   for trial in tracklist_subset:
         # shorten references for finbeat variables
         fb_peaktimes = finbeat_params[trial]['finbeat_peak_times']
         fb_effort = finbeat_params[trial]['finbeat_effort']
