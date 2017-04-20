@@ -76,9 +76,6 @@ wrangling functions are well documented and commented within the
 scripts. **When in doubt, run the script in process_points.py -- that's
 the master scaffold for use of all the other functions.**
 
-## Tests
-
-Ha, ha, ha. You're joking right? This is my first large coding project.
 
 ## Contributors
 
