@@ -52,7 +52,6 @@ This is written for Python 3, and has the following dependencies:
 
 * matplotlib
 * peakutils: https://bitbucket.org/lucashnegri/peakutils
-* pywt (PyWavelets): https://pywavelets.readthedocs.io/en/latest/
 * numpy
 * scipy
 * tkinter
