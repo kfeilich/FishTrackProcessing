@@ -1,10 +1,3 @@
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-import pandas as pd
-from make_subset import make_subset
-from mpl_toolkits.mplot3d import Axes3D
-
 def plot_accels_forfig(plotnum, trial, tracklist):
     """Plot tail beat acceleration and snout streamwise acceleration 
        This function is used within a figure script to produce panels 

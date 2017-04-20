@@ -1,18 +1,11 @@
 """These are just some usage examples, but you may as well just look 
 at the ones in the jupyter notebook. """
 
-
 from extract_data import extract_data
 from finbeat_calc import finbeat_calc
-from store_data import store_data
 from read_data import read_data
-from make_subset import make_subset
-from plot_accel import plot_accel
-from plot_track import plot_track
-from check_plots import check_plots
-from plot_analysis import plot_analysis
 from sin_corr import sin_corr
-from plot_fit_sine import plot_fit_sine
+from store_data import store_data
 
 # Take position data from hardcoded folder, calc. velocities, accels
 tracklist = extract_data()
