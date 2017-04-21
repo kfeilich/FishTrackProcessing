@@ -1,11 +1,6 @@
 """These are just some usage examples, but you may as well just look 
 at the ones in the jupyter notebook. """
-
-from extract_data import extract_data
-from finbeat_calc import finbeat_calc
-from read_data import read_data
-from sin_corr import sin_corr
-from store_data import store_data
+from all_functions import *
 
 # Take position data from hardcoded folder, calc. velocities, accels
 tracklist = extract_data()
